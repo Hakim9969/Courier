@@ -1,5 +1,26 @@
 <div class="min-h-screen bg-white p-6">
-  <h1 class="text-2xl font-bold text-gray-800 mb-6">My Sent Parcels</h1>
+  <h1 class="text-2xl font-bold text-gray-800 mb-6">My Parcels</h1>
+
+  <div class="flex flex-wrap gap-4 items-center mb-6">
+    <input
+      type="text"
+      [(ngModel)]="searchText"
+      (ngModelChange)="filterParcels()"
+      placeholder="Search by description, address, or weight..."
+      class="border border-gray-300 rounded px-3 py-2 text-sm w-64"
+    />
+    <select
+      [(ngModel)]="searchStatus"
+      (ngModelChange)="filterParcels()"
+      class="border border-gray-300 rounded px-3 py-2 text-sm w-48"
+    >
+      <option value="">All Statuses</option>
+      <option value="Pending">Pending</option>
+      <option value="Published">Published</option>
+      <option value="Cancelled">Cancelled</option>
+      <option value="Completed">Completed</option>
+    </select>
+  </div>
 
   <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
     <div class="overflow-x-auto">
@@ -15,7 +36,7 @@
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
-          <ng-container *ngFor="let parcel of parcels">
+          <ng-container *ngFor="let parcel of filteredParcels">
             <tr class="hover:bg-gray-50">
               <td class="px-6 py-4 text-sm text-blue-600 font-medium">{{ parcel.id }}</td>
               <td class="px-6 py-4 text-sm">{{ parcel.description }}</td>
@@ -65,7 +86,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="parcel-details-track" (click)="goToTrackOrder()" style="cursor:pointer;">
+                  <div class="parcel-details-track" (click)="goToTrackOrder(parcel)" style="cursor:pointer;">
                     <span class="parcel-details-track-icon">📦</span>
                     <span class="parcel-details-track-text">Track your parcel</span>
                   </div>

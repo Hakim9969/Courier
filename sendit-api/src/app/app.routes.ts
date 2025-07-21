@@ -31,7 +31,7 @@ export const routes: Routes = [
     path: 'customer/sent',
     canActivate: [AuthGuard, CustomerGuard],
     loadComponent: () =>
-      import('./customer/sent-parcels/sent-parcels.component').then((m) => m.SentParcelsComponent),
+      import('./customer/my-parcels/my-parcels.component').then(m => m.MyParcelsComponent),
   },
   
 
@@ -42,8 +42,19 @@ export const routes: Routes = [
   },
 
   {
+    path: 'track-order/:id',
+    canActivate: [AuthGuard, CustomerGuard],
+    loadComponent: () => import('./pages/track-order/track-order.component').then(m => m.TrackOrderComponent)
+  },
+
+  {
     path: 'about',
     loadComponent: () => import('./pages/about/about.component').then(m => m.AboutComponent)
+  },
+
+  {
+    path: 'terms',
+    loadComponent: () => import('./pages/terms/terms.component').then(m => m.TermsComponent)
   },
 
 

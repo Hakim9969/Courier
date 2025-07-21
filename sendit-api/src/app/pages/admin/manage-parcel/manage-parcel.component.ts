@@ -73,8 +73,12 @@ export class ManageParcelComponent {
     }
   }
 
-  goToTrackOrder() {
-    this.router.navigate(['/track-order']);
+  goToTrackOrder(parcel?: any) {
+    if (parcel && parcel.id) {
+      this.router.navigate(['/track-order', parcel.id]);
+    } else {
+      this.router.navigate(['/track-order']);
+    }
   }
 
   saveParcelEdit(parcel: any) {
@@ -85,6 +89,18 @@ export class ManageParcelComponent {
       localStorage.setItem('parcels', JSON.stringify(this.parcels));
       this.filterParcels();
       alert('Parcel updated successfully!');
+    }
+  }
+
+  deleteParcel(parcelId: string) {
+    // Remove from parcels
+    this.parcels = this.parcels.filter(p => p.id !== parcelId);
+    // Remove from all parcels in localStorage
+    localStorage.setItem('parcels', JSON.stringify(this.parcels));
+    this.filterParcels();
+    // If the deleted parcel was selected, close details
+    if (this.selectedParcel?.id === parcelId) {
+      this.selectedParcel = null;
     }
   }
 }

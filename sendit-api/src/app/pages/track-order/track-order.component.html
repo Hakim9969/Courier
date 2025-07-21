@@ -1,3 +1,30 @@
-<p>track-order.component works!</p>
+<app-navbar></app-navbar>
+
+<div class="track-order-container bg-gray-100 min-h-screen flex flex-col items-center py-10">
+  <ng-container *ngIf="parcel; else noParcel">
+    <div class="track-order-summary-row flex flex-wrap justify-center gap-4 mb-6">
+      <div class="track-order-summary-box">
+        <div class="track-order-summary-label">Parcel ID:</div>
+        <div class="track-order-summary-value">{{ parcel.id }}</div>
+      </div>
+      <div class="track-order-summary-box">
+        <span class="track-order-summary-icon">📍</span>
+        <div class="track-order-summary-label">Pickup Location:</div>
+        <div class="track-order-summary-value">{{ parcel.pickupLocation }}</div>
+      </div>
+      <div class="track-order-summary-box">
+        <span class="track-order-summary-icon">📦</span>
+        <div class="track-order-summary-label">Destination:</div>
+        <div class="track-order-summary-value">{{ parcel.deliveryAddress }}</div>
+      </div>
+    </div>
+    <div class="track-order-map-box bg-white rounded-lg shadow p-2">
+      <img src="assets/images/track-map-placeholder.png" alt="Map route" class="track-order-map-img" />
+    </div>
+  </ng-container>
+  <ng-template #noParcel>
+    <div class="text-gray-600 text-lg mt-12">No parcel found to track.</div>
+  </ng-template>
+</div>
 
 <app-footer></app-footer>

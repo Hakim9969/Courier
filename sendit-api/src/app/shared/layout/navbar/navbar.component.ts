@@ -24,6 +24,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   currentUser: User | null = null;
   private authSubscription: Subscription | null = null;
   private routerSubscription: Subscription | null = null;
+  currentRoute: string = '';
 
   @Output() loginClick = new EventEmitter<void>();
   @Output() registerClick = new EventEmitter<void>();
@@ -33,12 +34,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // Check auth status on initialization
     this.checkAuthStatus();
-    
+    this.currentRoute = this.router.url;
     // Listen to router events to refresh auth state on navigation
     this.routerSubscription = this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(() => {
+      .subscribe((event: any) => {
         this.checkAuthStatus();
+        this.currentRoute = event.urlAfterRedirects || event.url;
       });
 
     // Also listen to storage events for cross-tab synchronization
@@ -93,11 +95,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   openLogin() {
-    this.loginClick.emit();
+    this.router.navigate(['/'], { queryParams: { login: 'true' } });
   }
 
   openRegister() {
-    this.registerClick.emit();
+    this.router.navigate(['/'], { queryParams: { register: 'true' } });
   }
 
   navigateToDashboard() {
@@ -125,7 +127,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       role: user.role?.toLowerCase() === 'admin' ? 'admin' : 'customer'
     };
     this.isLoggedIn = true;
-    
+
     // Store user info and token
     localStorage.setItem('token', token);
     localStorage.setItem('sendit_current_user', JSON.stringify(user));
@@ -140,5 +142,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
   getUserDisplayName(): string {
     if (!this.currentUser) return '';
     return this.currentUser.name.split(' ')[0]; // Get first name only
+  }
+
+  isActiveRoute(route: string): boolean {
+    return this.currentRoute === route;
   }
 }

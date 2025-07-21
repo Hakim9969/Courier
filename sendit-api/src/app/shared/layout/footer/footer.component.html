@@ -36,7 +36,10 @@
       <!-- About Links Section -->
       <div class="space-y-4">
         <ul class="space-y-3">
-          <li *ngFor="let link of aboutLinks" class="text-sm font-medium hover:text-gray-300 cursor-pointer transition-colors">
+          <li class="text-sm font-medium hover:text-gray-300 cursor-pointer transition-colors">
+            <a routerLink="/about" class="hover:underline">About Us</a>
+          </li>
+          <li *ngFor="let link of aboutLinks" class="text-sm font-medium hover:text-gray-300 cursor-pointer transition-colors" [hidden]="link === 'About Us'">
             {{ link }}
           </li>
         </ul>
@@ -46,7 +49,8 @@
       <div class="space-y-4">
         <ul class="space-y-3">
           <li *ngFor="let link of networkLinks" class="text-sm font-medium hover:text-gray-300 cursor-pointer transition-colors">
-            {{ link }}
+            <a *ngIf="link === 'Terms & Conditions'" routerLink="/terms" class="hover:underline">Terms & Conditions</a>
+            <span *ngIf="link !== 'Terms & Conditions'">{{ link }}</span>
           </li>
         </ul>
       </div>

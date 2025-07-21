@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../shared/layout/navbar/navbar.component';
-import { SentParcelsComponent } from '../sent-parcels/sent-parcels.component';
+import { MyParcelsComponent } from '../my-parcels/my-parcels.component';
 import { FooterComponent } from '../../shared/layout/footer/footer.component';
 
 @Component({
   selector: 'app-customer-dashboard',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, SentParcelsComponent, FooterComponent],
+  imports: [CommonModule, NavbarComponent, MyParcelsComponent, FooterComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })

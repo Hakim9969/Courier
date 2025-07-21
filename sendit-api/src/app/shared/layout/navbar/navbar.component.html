@@ -3,9 +3,15 @@
 
   <div class="flex items-center gap-4">
     <!-- Navigation Links -->
-    <a routerLink="/" class="hover:text-blue-600 font-medium transition-colors duration-200">Home</a>
-    <a routerLink="/about" class="hover:text-blue-600 font-medium transition-colors duration-200">About Us</a>
-    <a routerLink="/track-order" class="hover:text-blue-600 font-medium transition-colors duration-200">Track Order</a>
+    <a routerLink="/" 
+       [ngClass]="isActiveRoute('/') ? 'underline-nav-link' : ''"
+       class="font-medium transition-colors duration-200">Home</a>
+    <a routerLink="/about" 
+       [ngClass]="isActiveRoute('/about') ? 'underline-nav-link' : ''"
+       class="font-medium transition-colors duration-200">About Us</a>
+    <a routerLink="/track-order" 
+       [ngClass]="isActiveRoute('/track-order') ? 'underline-nav-link' : ''"
+       class="font-medium transition-colors duration-200">Track Order</a>
 
     <!-- Authentication Section -->
     <div class="flex items-center gap-3">
@@ -37,8 +43,8 @@
         <!-- Logout Button -->
         <button (click)="logout()" 
                 class="px-4 py-2 rounded-lg font-semibold transition-all duration-200 shadow-sm text-red-600">
-          Logout
-        </button>
+      Logout
+    </button>
       </div>
     </div>
   </div>

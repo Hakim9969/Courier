@@ -1,0 +1,39 @@
+.terms-container {
+  background: #f3f4f6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+
+.max-w-3xl {
+  max-width: 48rem;
+}
+
+.bg-white {
+  background: #fff;
+}
+
+.rounded-lg {
+  border-radius: 1.25rem;
+}
+
+.shadow {
+  box-shadow: 0 4px 24px rgba(30,41,59,0.08);
+}
+
+h1, h2 {
+  font-family: inherit;
+}
+
+@media (max-width: 600px) {
+  .max-w-3xl {
+    max-width: 98vw;
+  }
+  .terms-container {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+} 

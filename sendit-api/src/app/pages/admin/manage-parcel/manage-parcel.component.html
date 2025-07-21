@@ -69,6 +69,8 @@
                 class="text-blue-600 hover:text-blue-900 font-medium">
           {{ selectedParcel?.id === parcel.id ? 'Hide Details' : 'View Details' }}
         </button>
+        <!-- Delete Button -->
+        <button (click)="deleteParcel(parcel.id)" class="ml-3 text-red-600 hover:text-red-900 font-medium">Delete</button>
       </td>
     </tr>
 
@@ -135,7 +137,7 @@
               </div>
             </div>
             <div class="flex justify-between items-center mt-4">
-              <div class="parcel-details-track" (click)="goToTrackOrder()" style="cursor:pointer;">
+              <div class="parcel-details-track" (click)="goToTrackOrder(parcel)" style="cursor:pointer;">
                 <span class="parcel-details-track-icon">📦</span>
                 <span class="parcel-details-track-text">Track your parcel</span>
               </div>

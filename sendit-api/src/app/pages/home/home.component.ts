@@ -4,6 +4,7 @@ import { NavbarComponent } from '../../shared/layout/navbar/navbar.component';
 import { FooterComponent } from '../../shared/layout/footer/footer.component';
 import { LoginComponent } from '../../auth/login/login.component';
 import { RegisterComponent } from '../../auth/register/register.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -37,6 +38,17 @@ export class HomeComponent {
 
   showLoginModal = false;
   showRegisterModal = false;
+
+  constructor(private route: ActivatedRoute) {
+    this.route.queryParams.subscribe(params => {
+      if (params['login']) {
+        this.openLoginModal();
+      }
+      if (params['register']) {
+        this.openRegisterModal();
+      }
+    });
+  }
 
   openLoginModal() {
     this.showLoginModal = true;

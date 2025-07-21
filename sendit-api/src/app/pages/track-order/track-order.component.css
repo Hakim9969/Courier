@@ -1,0 +1,74 @@
+.track-order-container {
+  background: #f3f4f6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+
+.track-order-summary-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.track-order-summary-box {
+  background: #fff;
+  border-radius: 0.8rem;
+  box-shadow: 0 2px 8px rgba(30,41,59,0.06);
+  padding: 1rem 2rem;
+  min-width: 12rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1rem;
+}
+
+.track-order-summary-label {
+  color: #888;
+  font-size: 0.97rem;
+  font-weight: 500;
+  margin-bottom: 0.2rem;
+}
+
+.track-order-summary-value {
+  color: #1e293b;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.track-order-summary-icon {
+  font-size: 1.3rem;
+  margin-bottom: 0.2rem;
+}
+
+.track-order-map-box {
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 4px 16px rgba(30,41,59,0.10);
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.track-order-map-img {
+  width: 400px;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 0.7rem;
+  display: block;
+}
+
+@media (max-width: 600px) {
+  .track-order-map-img {
+    width: 95vw;
+    height: 180px;
+  }
+  .track-order-summary-box {
+    min-width: 9rem;
+    padding: 0.7rem 0.7rem;
+  }
+}

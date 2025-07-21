@@ -1,0 +1,144 @@
+<div class="register-modal-outer">
+  <div class="register-modal">
+    <button class="register-modal-close" type="button" (click)="close.emit()">&times;</button>
+    <div class="register-modal-content">
+      <!-- Left: Register Form -->
+      <div class="register-modal-form-col">
+        <h2 class="register-modal-title">Register</h2>
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-modal-form">
+          <!-- Username Field -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">User name</label>
+            <input 
+              type="text" 
+              formControlName="username"
+              placeholder="Enter your user name"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              [class.border-red-500]="hasError('username', 'required')"
+            />
+            <div *ngIf="hasError('username', 'required')" class="text-red-500 text-sm mt-1">
+              Username is required
+            </div>
+          </div>
+          <!-- Phone Number Field -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+            <input 
+              type="tel" 
+              formControlName="phoneNumber"
+              placeholder="Enter your phone number"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              [class.border-red-500]="hasError('phoneNumber', 'required') || hasError('phoneNumber', 'pattern')"
+            />
+            <div *ngIf="hasError('phoneNumber', 'required')" class="text-red-500 text-sm mt-1">
+              Phone number is required
+            </div>
+            <div *ngIf="hasError('phoneNumber', 'pattern')" class="text-red-500 text-sm mt-1">
+              Please enter a valid 10-digit phone number
+            </div>
+          </div>
+          <!-- Email Field -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+            <input 
+              type="email" 
+              formControlName="email"
+              placeholder="Enter your email address"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              [class.border-red-500]="hasError('email', 'required') || hasError('email', 'email')"
+            />
+            <div *ngIf="hasError('email', 'required')" class="text-red-500 text-sm mt-1">
+              Email is required
+            </div>
+            <div *ngIf="hasError('email', 'email')" class="text-red-500 text-sm mt-1">
+              Please enter a valid email address
+            </div>
+          </div>
+          <!-- Password Field -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+            <div class="relative">
+              <input 
+                [type]="showPassword ? 'text' : 'password'" 
+                formControlName="password"
+                placeholder="Enter your password"
+                class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                [class.border-red-500]="hasError('password', 'required') || hasError('password', 'minlength')"
+              />
+              <button 
+                type="button"
+                (click)="togglePasswordVisibility('password')"
+                class="absolute inset-y-0 right-0 pr-3 flex items-center"
+              >
+                <svg *ngIf="!showPassword" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <svg *ngIf="showPassword" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L7.05 7.05M9.878 9.878a3 3 0 105.304-.114m0 0L17.05 7.05M9.878 9.878l8.485-8.485" />
+                </svg>
+              </button>
+            </div>
+            <div *ngIf="hasError('password', 'required')" class="text-red-500 text-sm mt-1">
+              Password is required
+            </div>
+            <div *ngIf="hasError('password', 'minlength')" class="text-red-500 text-sm mt-1">
+              Password must be at least 6 characters long
+            </div>
+          </div>
+          <!-- Confirm Password Field -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+            <div class="relative">
+              <input 
+                [type]="showConfirmPassword ? 'text' : 'password'" 
+                formControlName="confirmPassword"
+                placeholder="Confirm your password"
+                class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                [class.border-red-500]="hasError('confirmPassword', 'required') || hasError('confirmPassword', 'mismatch')"
+              />
+              <button 
+                type="button"
+                (click)="togglePasswordVisibility('confirmPassword')"
+                class="absolute inset-y-0 right-0 pr-3 flex items-center"
+              >
+                <svg *ngIf="!showConfirmPassword" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <svg *ngIf="showConfirmPassword" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L7.05 7.05M9.878 9.878a3 3 0 105.304-.114m0 0L17.05 7.05M9.878 9.878l8.485-8.485" />
+                </svg>
+              </button>
+            </div>
+            <div *ngIf="hasError('confirmPassword', 'required')" class="text-red-500 text-sm mt-1">
+              Please confirm your password
+            </div>
+            <div *ngIf="hasError('confirmPassword', 'mismatch')" class="text-red-500 text-sm mt-1">
+              Passwords do not match
+            </div>
+          </div>
+          <!-- Role Selector -->
+          <!-- (Removed 'Register as' field) -->
+          <!-- Sign Up Button -->
+          <button 
+            type="submit" 
+            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            [disabled]="registerForm.invalid"
+          >
+            Sign up
+          </button>
+          <!-- Sign In Link -->
+          <p class="text-center text-sm text-gray-600">
+            Already have an account?
+            <a routerLink="/login" class="text-blue-600 hover:text-blue-800 font-medium ml-1">Sign in now</a>
+          </p>
+        </form>
+      </div>
+      <!-- Right: Image -->
+      <div class="register-modal-image-col">
+        <img src="assets/images/Loginregister.jpg" alt="Register Illustration" class="register-modal-image" />
+      </div>
+    </div>
+  </div>
+</div>

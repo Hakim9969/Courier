@@ -1,0 +1,153 @@
+<div class="min-h-screen bg-white p-6">
+  <h1 class="text-2xl font-bold text-gray-800 mb-6">Manage Parcel</h1>
+  <!-- Search Bar -->
+  <div class="flex flex-wrap gap-4 items-center mb-6">
+    <input
+      type="text"
+      [(ngModel)]="searchText"
+      (ngModelChange)="filterParcels()"
+      placeholder="Search by description, address, or weight..."
+      class="border border-gray-300 rounded px-3 py-2 text-sm w-64"
+    />
+    <select
+      [(ngModel)]="searchStatus"
+      (ngModelChange)="filterParcels()"
+      class="border border-gray-300 rounded px-3 py-2 text-sm w-48"
+    >
+      <option value="">All Statuses</option>
+      <option value="Pending">Pending</option>
+      <option value="Published">Published</option>
+      <option value="Cancelled">Cancelled</option>
+      <option value="Completed">Completed</option>
+    </select>
+  </div>
+  
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-gray-50 border-b border-gray-200">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Delivery Address</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+  <ng-container *ngFor="let parcel of filteredParcels">
+    <!-- Main Row -->
+    <tr class="hover:bg-gray-50">
+      <td class="px-6 py-4 text-sm text-blue-600 font-medium">
+        {{ parcel.id }}
+      </td>
+      <td class="px-6 py-4 text-sm text-gray-900">
+        {{ parcel.description }}
+      </td>
+      <td class="px-6 py-4 text-sm text-gray-900">
+        {{ parcel.deliveryAddress }}
+      </td>
+      <td class="px-6 py-4 text-sm text-gray-900">
+        {{ parcel.expectedReceiveDate }}
+      </td>
+      <td class="px-6 py-4">
+        <select
+         class="text-sm rounded px-2 py-1 border border-gray-300"
+         [ngClass]="getStatusClasses(parcel.status)"
+         [ngModel]="parcel.status"
+         (ngModelChange)="updateParcelStatus(parcel.id, $event)"
+        >
+          <option value="Pending">Pending</option>
+          <option value="Published">Published</option>
+          <option value="Cancelled">Cancelled</option>
+          <option value="Completed">Completed</option>
+        </select>
+      </td>
+      <td class="px-6 py-4 text-sm text-gray-900">
+        <button (click)="toggleDetails(parcel)"
+                class="text-blue-600 hover:text-blue-900 font-medium">
+          {{ selectedParcel?.id === parcel.id ? 'Hide Details' : 'View Details' }}
+        </button>
+      </td>
+    </tr>
+
+    <!-- Inline Details Row -->
+    <tr *ngIf="selectedParcel?.id === parcel.id">
+      <td colspan="6" class="bg-gray-50 px-6 py-4 text-sm text-gray-700">
+        <div class="parcel-details-section">
+          <form (ngSubmit)="saveParcelEdit(parcel)" class="w-full">
+            <div class="parcel-details-grid">
+              <div class="parcel-detail-box">
+                <div class="parcel-detail-label">Parcel ID:</div>
+                <div class="parcel-detail-value">{{ parcel.id }}</div>
+              </div>
+              <div class="parcel-detail-box">
+                <div class="parcel-detail-label">Sent On:</div>
+                <div class="parcel-detail-value">
+                  <ng-container *ngIf="parcel.status === 'Pending'; else sentOnText">
+                    <input [(ngModel)]="parcel.expectedReceiveDate" name="expectedReceiveDate" class="w-full border rounded px-2 py-1 text-sm" />
+                  </ng-container>
+                  <ng-template #sentOnText>{{ parcel.expectedReceiveDate }}</ng-template>
+                </div>
+              </div>
+              <div class="parcel-detail-box">
+                <div class="parcel-detail-label">Receiver:</div>
+                <div class="parcel-detail-value">
+                  <ng-container *ngIf="parcel.status === 'Pending'; else receiverText">
+                    <input [(ngModel)]="parcel.receiverName" name="receiverName" class="w-full border rounded px-2 py-1 text-sm" />
+                  </ng-container>
+                  <ng-template #receiverText>{{ parcel.receiverName }}</ng-template>
+                </div>
+              </div>
+              <div class="parcel-detail-box">
+                <div class="parcel-detail-label">Weight:</div>
+                <div class="parcel-detail-value">
+                  <ng-container *ngIf="parcel.status === 'Pending'; else weightText">
+                    <input [(ngModel)]="parcel.weight" name="weight" class="w-full border rounded px-2 py-1 text-sm" />
+                  </ng-container>
+                  <ng-template #weightText>{{ parcel.weight }}</ng-template>
+                </div>
+              </div>
+              <div class="parcel-detail-box">
+                <div class="parcel-detail-label">Destination:</div>
+                <div class="parcel-detail-value">
+                  <ng-container *ngIf="parcel.status === 'Pending'; else destText">
+                    <input [(ngModel)]="parcel.deliveryAddress" name="deliveryAddress" class="w-full border rounded px-2 py-1 text-sm" />
+                  </ng-container>
+                  <ng-template #destText>{{ parcel.deliveryAddress }}</ng-template>
+                </div>
+              </div>
+              <div class="parcel-detail-box">
+                <div class="parcel-detail-label">Pickup:</div>
+                <div class="parcel-detail-value">
+                  <ng-container *ngIf="parcel.status === 'Pending'; else pickupText">
+                    <input [(ngModel)]="parcel.pickupLocation" name="pickupLocation" class="w-full border rounded px-2 py-1 text-sm" />
+                  </ng-container>
+                  <ng-template #pickupText>{{ parcel.pickupLocation }}</ng-template>
+                </div>
+              </div>
+              <div class="parcel-detail-box">
+                <div class="parcel-detail-label">Status:</div>
+                <div class="parcel-detail-value">
+                  <span class="parcel-status-badge">{{ parcel.status || 'Pending' }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="flex justify-between items-center mt-4">
+              <div class="parcel-details-track" (click)="goToTrackOrder()" style="cursor:pointer;">
+                <span class="parcel-details-track-icon">📦</span>
+                <span class="parcel-details-track-text">Track your parcel</span>
+              </div>
+              <button *ngIf="parcel.status === 'Pending'" type="submit" class="bg-blue-600 text-white px-4 py-2 rounded font-semibold hover:bg-blue-700 transition">Save</button>
+            </div>
+          </form>
+        </div>
+      </td>
+    </tr>
+  </ng-container>
+</tbody>
+      </table>
+    </div>
+  </div>
+</div>

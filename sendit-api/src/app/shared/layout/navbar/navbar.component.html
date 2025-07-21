@@ -1,0 +1,45 @@
+<nav class="bg-white shadow px-6 py-4 flex justify-between items-center">
+  <a routerLink="/" class="text-2xl font-bold text-blue-600">SendIT</a>
+
+  <div class="flex items-center gap-4">
+    <!-- Navigation Links -->
+    <a routerLink="/" class="hover:text-blue-600 font-medium transition-colors duration-200">Home</a>
+    <a routerLink="/about" class="hover:text-blue-600 font-medium transition-colors duration-200">About Us</a>
+    <a routerLink="/track-order" class="hover:text-blue-600 font-medium transition-colors duration-200">Track Order</a>
+
+    <!-- Authentication Section -->
+    <div class="flex items-center gap-3">
+      <!-- Login/Register Buttons (when not logged in) -->
+      <div *ngIf="!isLoggedIn" class="inline-flex rounded-full shadow overflow-hidden">
+        <a (click)="openLogin()" 
+           class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 font-semibold hover:from-blue-600 hover:to-blue-700 transition-all duration-200 focus:z-10 cursor-pointer">
+          Login
+        </a>
+        <a (click)="openRegister()" 
+           class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-2 font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-200 border-l border-blue-400 focus:z-10 cursor-pointer">
+          Register
+        </a>
+      </div>
+
+      <!-- Logged In User Section -->
+      <div *ngIf="isLoggedIn" class="flex items-center gap-3">
+        <!-- User Greeting -->
+        <span class="text-gray-700 font-medium hidden sm:block">
+          Hello, {{ getUserDisplayName() }}!
+        </span>
+
+        <!-- Dashboard Button -->
+        <button (click)="navigateToDashboard()" 
+                class="px-4 py-2 rounded-lg font-semibold transition-all duration-200 shadow-sm">
+          {{ getDashboardLabel() }}
+        </button>
+
+        <!-- Logout Button -->
+        <button (click)="logout()" 
+                class="px-4 py-2 rounded-lg font-semibold transition-all duration-200 shadow-sm text-red-600">
+          Logout
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>

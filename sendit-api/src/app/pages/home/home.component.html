@@ -1,0 +1,173 @@
+<app-navbar (loginClick)="openLoginModal()" (registerClick)="openRegisterModal()"></app-navbar>
+
+<!-- Login Modal -->
+<div *ngIf="showLoginModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white rounded-lg shadow-lg max-w-lg w-full relative">
+    <button (click)="closeLoginModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+    <app-login (close)="closeLoginModal()"></app-login>
+  </div>
+</div>
+
+<!-- Register Modal -->
+<div *ngIf="showRegisterModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white rounded-lg shadow-lg max-w-lg w-full relative">
+    <button (click)="closeRegisterModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+    <app-register (close)="closeRegisterModal()"></app-register>
+  </div>
+</div>
+
+<main class="min-h-screen">
+  <!-- Hero Section -->
+  <section class="bg-white py-16 lg:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col lg:flex-row items-center justify-between">
+        <div class="lg:w-1/2 mb-12 lg:mb-0">
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            The Best Ever Courier Service In The World
+          </h1>
+          <p class="text-lg text-gray-600 mb-8 leading-relaxed max-w-lg">
+            We provide fast, reliable, and secure delivery services worldwide. 
+            Your packages are our priority.
+          </p>
+          <button class="bg-blue-600 text-white px-8 py-4 rounded-md font-semibold hover:bg-blue-700 transition duration-300 text-lg">
+            Get Started
+          </button>
+          <div class="flex items-center mt-8 text-gray-500">
+            <div class="flex items-center mr-6">
+              <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+              <span class="text-sm">Safe & Secure</span>
+            </div>
+          </div>
+        </div>
+        <div class="lg:w-1/2 flex justify-center lg:justify-end">
+          <div class="relative">
+            <!-- Delivery Person Image Placeholder -->
+            <div class="home-hero-image-container">
+              <img src="assets/images/Homeimage1.jpg" alt="" class="home-hero-image">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Who We Are Section -->
+  <section class="bg-gray-50 py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col lg:flex-row items-center">
+        <div class="lg:w-1/2 mb-12 lg:mb-0">
+          <img src="assets/images/Homeimage2.jpg" alt="Who We Are" class="who-we-are-image rounded-lg shadow-lg">
+        </div>
+        <div class="lg:w-1/2 lg:pl-12">
+          <h2 class="text-4xl font-bold text-gray-900 mb-6">Who we are?</h2>
+          <p class="text-gray-600 mb-6 leading-relaxed">
+            We are a team of dedicated professionals committed to providing exceptional courier services. 
+            With years of experience in the logistics industry, we understand the importance of timely 
+            and secure delivery of your packages.
+          </p>
+          <p class="text-gray-600 leading-relaxed">
+            Our mission is to connect people and businesses through reliable delivery solutions, 
+            making shipping simple, fast, and affordable for everyone. We pride ourselves on our 
+            commitment to excellence and customer satisfaction.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- We Deliver Carefully Section -->
+  <section class="bg-white py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col lg:flex-row items-center">
+        <div class="lg:w-1/2 mb-12 lg:mb-0 lg:pr-12">
+          <h2 class="text-4xl font-bold text-gray-900 mb-6">We deliver very carefully</h2>
+          <p class="text-gray-600 mb-6 leading-relaxed">
+            Every package is handled with the utmost care and attention. Our trained professionals 
+            ensure your items are packed securely and delivered safely to their destination.
+          </p>
+          <p class="text-gray-600 leading-relaxed">
+            We use advanced tracking technology and quality assurance processes to guarantee 
+            the safety and integrity of your shipments throughout the entire delivery process.
+          </p>
+        </div>
+        <div class="lg:w-1/2 flex justify-center">
+           <img src="assets/images/Homeimage3.jpg" alt="" class="careful-delivery-image">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Services Section -->
+  <section class="bg-gray-50 py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold text-gray-900 mb-4">Our services</h2>
+      </div>
+      <div class="flex justify-center">
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- Truck SVG Icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 32 32"><g><rect width="32" height="32" fill="none"/><path d="M6 22V10a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v12" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 16h4.586a2 2 0 0 1 1.414.586l1.414 1.414A2 2 0 0 1 28 19.414V22a2 2 0 0 1-2 2h-2" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10.5" cy="23.5" r="1.5" fill="#2563eb"/><circle cx="21.5" cy="23.5" r="1.5" fill="#2563eb"/></g></svg>
+          </div>
+          <div class="service-title">By Land</div>
+          <div class="service-desc">Use of electric vehicles.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Network Section -->
+  <section class="network-section">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col lg:flex-row items-center">
+        <div class="lg:w-1/2 mb-12 lg:mb-0">
+          <img src="assets/images/Network.jpg" alt="" class="network-image">
+        </div>
+        <div class="lg:w-1/2 lg:pl-12">
+          <h2 class="network-title">Our Network serve countrywide</h2>
+          <p class="network-desc">
+            With an extensive network spanning across the country, we ensure your packages 
+            reach every corner efficiently and on time. Our logistics network is designed 
+            for maximum coverage and reliability.
+          </p>
+          <div class="grid grid-cols-2 gap-6 network-stats">
+            <div *ngFor="let stat of networkStats" class="text-center">
+              <div class="text-2xl lg:text-3xl font-bold mb-2">{{stat.number}}</div>
+              <div class="network-stat-label">{{stat.label}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="bg-white py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold text-gray-900 mb-4">Our Awesome Clients</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">
+          Don't just take our word for it. Here's what our satisfied customers have to say about our services.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div *ngFor="let testimonial of testimonials" class="bg-gray-50 p-8 rounded-lg">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center mr-4">
+              <img [src]="testimonial.avatar" alt="{{testimonial.name}}" class="testimonial-avatar">
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-900">{{testimonial.name}}</h4>
+              <div class="flex text-yellow-400 text-sm">
+                <span *ngFor="let star of [1,2,3,4,5]">★</span>
+              </div>
+            </div>
+          </div>
+          <p class="text-gray-600 italic leading-relaxed">{{testimonial.comment}}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-footer></app-footer>

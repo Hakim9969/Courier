@@ -11,8 +11,9 @@
           *ngFor="let item of sidebarItems"
           (click)="onSidebarItemClick(item)"
           [class]="item.active ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-100'"
-          class="w-full text-left px-4 py-2 rounded transition-colors duration-200">
-          {{ item.label }}
+          class="w-full text-left px-4 py-2 rounded transition-colors duration-200 flex items-center gap-2">
+          <span class="sidebar-icon text-lg">{{ item.icon }}</span>
+          <span>{{ item.label }}</span>
         </button>
       </nav>
     </aside>
@@ -187,7 +188,7 @@
                         </div>
                         <div class="flex justify-between items-center mt-4">
                           <div class="parcel-details-track" (click)="goToTrackOrder(parcel)" style="cursor:pointer;">
-                            <span class="parcel-details-track-icon">📦</span>
+                            <span class="parcel-details-track-icon">🗺️</span>
                             <span class="parcel-details-track-text">Track your parcel</span>
                           </div>
                           <button *ngIf="parcel.status === 'Pending'" type="submit" class="bg-blue-600 text-white px-4 py-2 rounded font-semibold hover:bg-blue-700 transition">Save</button>

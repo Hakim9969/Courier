@@ -4,6 +4,7 @@
   <ng-container *ngIf="parcel; else noParcel">
     <div class="track-order-summary-row flex flex-wrap justify-center gap-4 mb-6">
       <div class="track-order-summary-box">
+        <span class="track-order-summary-icon">🔎</span>
         <div class="track-order-summary-label">Parcel ID:</div>
         <div class="track-order-summary-value">{{ parcel.id }}</div>
       </div>
@@ -13,7 +14,7 @@
         <div class="track-order-summary-value">{{ parcel.pickupLocation }}</div>
       </div>
       <div class="track-order-summary-box">
-        <span class="track-order-summary-icon">📦</span>
+        <span class="track-order-summary-icon">🏠</span>
         <div class="track-order-summary-label">Destination:</div>
         <div class="track-order-summary-value">{{ parcel.deliveryAddress }}</div>
       </div>

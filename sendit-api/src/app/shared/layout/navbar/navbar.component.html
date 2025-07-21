@@ -35,16 +35,18 @@
         </span>
 
         <!-- Dashboard Button -->
-        <button (click)="navigateToDashboard()" 
-                class="px-4 py-2 rounded-lg font-semibold transition-all duration-200 shadow-sm">
+        <a *ngIf="getDashboardLabel()" 
+           [routerLink]="getDashboardRoute()" 
+           [ngClass]="isActiveRoute(getDashboardRoute()) ? 'underline-nav-link' : ''"
+           class="font-medium transition-colors duration-200 cursor-pointer">
           {{ getDashboardLabel() }}
-        </button>
+        </a>
 
         <!-- Logout Button -->
-        <button (click)="logout()" 
-                class="px-4 py-2 rounded-lg font-semibold transition-all duration-200 shadow-sm text-red-600">
-      Logout
-    </button>
+        <a (click)="logout()"
+           class="font-medium transition-colors duration-200 text-red-600 cursor-pointer">
+          Logout
+        </a>
       </div>
     </div>
   </div>

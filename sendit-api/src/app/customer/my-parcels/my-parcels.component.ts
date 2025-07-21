@@ -21,20 +21,20 @@ export class MyParcelsComponent {
   constructor(private router: Router) {}
 
   ngOnInit() {
-    const user = localStorage.getItem('sendit_current_user');
-    if (!user) {
-      this.parcels = [];
+  const user = localStorage.getItem('sendit_current_user');
+  if (!user) {
+    this.parcels = [];
       this.filteredParcels = [];
-      return;
-    }
-    this.currentUser = JSON.parse(user);
-    const stored = localStorage.getItem('parcels');
-    const allParcels = stored ? JSON.parse(stored) : [];
-    this.parcels = allParcels.filter(
-      (p: any) =>
-        p.senderEmail === this.currentUser.email ||
-        p.email === this.currentUser.email
-    );
+    return;
+  }
+  this.currentUser = JSON.parse(user);
+  const stored = localStorage.getItem('parcels');
+  const allParcels = stored ? JSON.parse(stored) : [];
+  this.parcels = allParcels.filter(
+  (p: any) =>
+    p.senderEmail === this.currentUser.email ||
+    p.email === this.currentUser.email
+);
     this.filterParcels();
   }
 
@@ -54,7 +54,7 @@ export class MyParcelsComponent {
     if (parcel && parcel.id) {
       this.router.navigate(['/track-order', parcel.id]);
     } else {
-      this.router.navigate(['/track-order']);
+    this.router.navigate(['/track-order']);
     }
   }
 

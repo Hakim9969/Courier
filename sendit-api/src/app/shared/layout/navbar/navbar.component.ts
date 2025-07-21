@@ -144,6 +144,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
     return this.currentUser.name.split(' ')[0]; // Get first name only
   }
 
+  // Get dashboard route for routerLink
+  getDashboardRoute(): string {
+    if (!this.currentUser) return '/';
+    return this.currentUser.role === 'admin' ? '/admin/dashboard' : '/customer/dashboard';
+  }
+
   isActiveRoute(route: string): boolean {
     return this.currentRoute === route;
   }

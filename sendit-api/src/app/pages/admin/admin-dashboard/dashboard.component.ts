@@ -37,10 +37,10 @@ export class AdminDashboardComponent implements OnInit{
   activePage: string = 'dashboard';
 
   sidebarItems = [
-    { label: 'Dashboard', active: true, route: '/admin/dashboard' },
-    { label: 'Create Parcel', active: false, route: '/admin/create-parcel' },
-    { label: 'Manage Parcel', active: false, route: '/admin/manage-parcel' },
-    { label: 'Manage Users', active: false, route: '/admin/users' }
+    { label: 'Dashboard', icon: '📊', active: true, route: '/admin/dashboard' },
+    { label: 'Create Parcel', icon: '➕', active: false, route: '/admin/create-parcel' },
+    { label: 'Manage Parcel', icon: '📦', active: false, route: '/admin/manage-parcel' },
+    { label: 'Manage Users', icon: '👤', active: false, route: '/admin/users' }
   ];
 
   constructor(private router: Router) {}

@@ -82,6 +82,12 @@
   font-size: 1.3rem;
 }
 
+.sidebar-icon {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 0.5rem;
+}
+
 @media (max-width: 900px) {
   .parcel-details-grid {
     grid-template-columns: 1fr 1fr;

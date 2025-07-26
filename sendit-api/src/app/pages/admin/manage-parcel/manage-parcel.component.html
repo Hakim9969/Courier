@@ -94,6 +94,24 @@
                 </div>
               </div>
               <div class="parcel-detail-box">
+                <div class="parcel-detail-label">Sender Name:</div>
+                <div class="parcel-detail-value">
+                  <ng-container *ngIf="parcel.status === 'Pending'; else senderNameText">
+                    <input [(ngModel)]="parcel.senderName" name="senderName" class="w-full border rounded px-2 py-1 text-sm" />
+                  </ng-container>
+                  <ng-template #senderNameText>{{ parcel.senderName || '-' }}</ng-template>
+                </div>
+              </div>
+              <div class="parcel-detail-box">
+                <div class="parcel-detail-label">Sender Email:</div>
+                <div class="parcel-detail-value">
+                  <ng-container *ngIf="parcel.status === 'Pending'; else senderEmailText">
+                    <input [(ngModel)]="parcel.senderEmail" name="senderEmail" class="w-full border rounded px-2 py-1 text-sm" />
+                  </ng-container>
+                  <ng-template #senderEmailText>{{ parcel.senderEmail || '-' }}</ng-template>
+                </div>
+              </div>
+              <div class="parcel-detail-box">
                 <div class="parcel-detail-label">Receiver:</div>
                 <div class="parcel-detail-value">
                   <ng-container *ngIf="parcel.status === 'Pending'; else receiverText">

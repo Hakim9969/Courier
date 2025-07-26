@@ -24,7 +24,12 @@ export class LoginComponent {
   login() {
     try {
       const user = this.authService.login(this.email, this.password);
-      this.router.navigate([user.role === 'ADMIN' ? '/admin/dashboard' : '/customer/dashboard']);
+      this.router.navigate([
+        user.role === 'ADMIN' ? '/admin/dashboard' :
+        user.role === 'CUSTOMER' ? '/' :
+        '/'
+      ]);
+      this.close.emit();
     } catch (err: any) {
       this.error = err.message || 'Login failed';
     }

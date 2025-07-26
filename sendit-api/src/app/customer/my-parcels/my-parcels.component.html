@@ -64,6 +64,14 @@
                       <div class="parcel-detail-value">{{ parcel.expectedReceiveDate }}</div>
                     </div>
                     <div class="parcel-detail-box">
+                      <div class="parcel-detail-label">Sender Name:</div>
+                      <div class="parcel-detail-value">{{ parcel.senderName || '-' }}</div>
+                    </div>
+                    <div class="parcel-detail-box">
+                      <div class="parcel-detail-label">Sender Email:</div>
+                      <div class="parcel-detail-value">{{ parcel.senderEmail || '-' }}</div>
+                    </div>
+                    <div class="parcel-detail-box">
                       <div class="parcel-detail-label">Receiver:</div>
                       <div class="parcel-detail-value">{{ parcel.receiverName }}</div>
                     </div>

@@ -9,6 +9,16 @@
         <div class="track-order-summary-value">{{ parcel.id }}</div>
       </div>
       <div class="track-order-summary-box">
+        <span class="track-order-summary-icon">✉️</span>
+        <div class="track-order-summary-label">Sender Email:</div>
+        <div class="track-order-summary-value">{{ parcel.senderEmail || '-' }}</div>
+      </div>
+      <div class="track-order-summary-box">
+        <span class="track-order-summary-icon">📧</span>
+        <div class="track-order-summary-label">Receiver Email:</div>
+        <div class="track-order-summary-value">{{ parcel.email || '-' }}</div>
+      </div>
+      <div class="track-order-summary-box">
         <span class="track-order-summary-icon">📍</span>
         <div class="track-order-summary-label">Pickup Location:</div>
         <div class="track-order-summary-value">{{ parcel.pickupLocation }}</div>
@@ -19,9 +29,13 @@
         <div class="track-order-summary-value">{{ parcel.deliveryAddress }}</div>
       </div>
     </div>
-    <div class="track-order-map-box bg-white rounded-lg shadow p-2">
-      <img src="assets/images/track-map-placeholder.png" alt="Map route" class="track-order-map-img" />
-    </div>
+    <div class="track-order-map-box bg-white rounded-lg shadow p-2 w-full max-w-4xl h-[400px]">
+  <div #mapContainer class="w-full h-full rounded-lg"></div>
+</div>
+
+    <button (click)="goToDashboard()" class="mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold shadow hover:bg-blue-700 transition">
+      {{ getDashboardButtonLabel() }}
+    </button>
   </ng-container>
   <ng-template #noParcel>
     <div class="text-gray-600 text-lg mt-12">No parcel found to track.</div>

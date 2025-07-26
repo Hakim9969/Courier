@@ -69,17 +69,6 @@
               placeholder="Search by description, address, or weight..."
               class="border border-gray-300 rounded px-3 py-2 text-sm w-64"
             />
-            <select
-              [(ngModel)]="searchStatus"
-              (ngModelChange)="filterPendingParcels()"
-              class="border border-gray-300 rounded px-3 py-2 text-sm w-48"
-            >
-              <option value="">All Statuses</option>
-              <option value="Pending">Pending</option>
-              <option value="Published">Published</option>
-              <option value="Cancelled">Cancelled</option>
-              <option value="Completed">Completed</option>
-            </select>
           </div>
           <table class="w-full">
             <thead class="bg-gray-50 border-b border-gray-200">
@@ -141,6 +130,24 @@
                                 <input [(ngModel)]="parcel.expectedReceiveDate" name="expectedReceiveDate" class="w-full border rounded px-2 py-1 text-sm" />
                               </ng-container>
                               <ng-template #sentOnText>{{ parcel.expectedReceiveDate }}</ng-template>
+                            </div>
+                          </div>
+                          <div class="parcel-detail-box">
+                            <div class="parcel-detail-label">Sender Name:</div>
+                            <div class="parcel-detail-value">
+                              <ng-container *ngIf="parcel.status === 'Pending'; else senderNameText">
+                                <input [(ngModel)]="parcel.senderName" name="senderName" class="w-full border rounded px-2 py-1 text-sm" />
+                              </ng-container>
+                              <ng-template #senderNameText>{{ parcel.senderName || '-' }}</ng-template>
+                            </div>
+                          </div>
+                          <div class="parcel-detail-box">
+                            <div class="parcel-detail-label">Sender Email:</div>
+                            <div class="parcel-detail-value">
+                              <ng-container *ngIf="parcel.status === 'Pending'; else senderEmailText">
+                                <input [(ngModel)]="parcel.senderEmail" name="senderEmail" class="w-full border rounded px-2 py-1 text-sm" />
+                              </ng-container>
+                              <ng-template #senderEmailText>{{ parcel.senderEmail || '-' }}</ng-template>
                             </div>
                           </div>
                           <div class="parcel-detail-box">

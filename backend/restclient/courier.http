@@ -1,0 +1,20 @@
+@ADMIN_TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmNzE0OTgxZi0xODE2LTRkMTYtODYwYy03ODAwNTliOGQ2OGEiLCJlbWFpbCI6Imhha2lteWFraW0yMDBAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzUzNTIzOTY1LCJleHAiOjE3NTM2MTAzNjV9.p1NcOuiDgeYXzeem-czJ6s5q6oAQ-virAiD0qtl7fh8
+@CUSTOMER_TOKEN = NeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhYmUzY2ViYi04ZTFhLTQwZDktOWMyMS1lZGJkZjQ0ZDQzOWMiLCJlbWFpbCI6InNoYW5AZ21haWwuY29tIiwicm9sZSI6IkNVU1RPTUVSIiwiaWF0IjoxNzUzNTI0NDk4LCJleHAiOjE3NTM2MTA4OTh9.fgZp0Tu8r8SHF-dgDNj5tAhHr3eyf6rxnb_anu3YcjM
+### Create Courier (Admin Only)
+POST http://localhost:3000/couriers
+Content-Type: application/json
+Authorization: Bearer {{ADMIN_TOKEN}}
+
+{
+  "name": "Zulfa Courier",
+  "email": "zulfa.courier@sendit.com",
+  "phone": "+254711523364"
+}
+
+### Get All Couriers
+GET http://localhost:3000/couriers
+Authorization: Bearer {{ADMIN_TOKEN}}
+
+### Get Single Courier
+GET http://localhost:3000/couriers/c3eb5e97-aa70-42be-a79f-9aa6c7fadbcc
+Authorization: Bearer {{ADMIN_TOKEN}}

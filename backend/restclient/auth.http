@@ -1,0 +1,38 @@
+### Register a new user
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "name": "Abdul Hakim",
+  "email": "hakimyakim200@gmail.com",
+  "password": "hakim200",
+  "phone": "0745115061"
+}
+
+### Login
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "samir@gmail.com",
+  "password": "hakim200"
+}
+
+### Request Password Reset Code
+POST http://localhost:3000/auth/forgot-password
+Content-Type: application/json
+
+{
+  "email": "hakimyakim200@gmail.com"
+}
+
+### Reset Password
+POST http://localhost:3000/auth/reset-password
+Content-Type: application/json
+
+{
+  "email": "hakimyakim200@gmail.com",
+  "code": "123456",  // Replace with real code from email
+  "newPassword": "haknewpass123"
+}
+

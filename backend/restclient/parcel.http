@@ -1,0 +1,53 @@
+@ADMIN_TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmNzE0OTgxZi0xODE2LTRkMTYtODYwYy03ODAwNTliOGQ2OGEiLCJlbWFpbCI6Imhha2lteWFraW0yMDBAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzUzNTIzOTY1LCJleHAiOjE3NTM2MTAzNjV9.p1NcOuiDgeYXzeem-czJ6s5q6oAQ-virAiD0qtl7fh8
+@sender_id = abe3cebb-8e1a-40d9-9c21-edbdf44d439c
+@receiver_id = f111646a-7328-4eac-919b-266ed1499f2d
+@parcel_id = 4448e1d9-e3ae-430c-b71c-9ac7e5f6d8e8
+@courier_id = ff3179f5-26e7-4d8f-817c-659f2257fcec
+
+### CREATE a new parcel (Admin only)
+POST http://localhost:3000/parcels
+Authorization: Bearer {{ADMIN_TOKEN}}
+Content-Type: application/json
+
+{
+  "senderId": "{{sender_id}}",
+  "receiverId": "{{receiver_id}}",
+  "receiverName": "Jane Muthoni",
+  "receiverPhone": "+254701112233",
+  "pickupAddress": "Kenyatta Market, Nairobi",
+  "destination": "Two Rivers Mall, Nairobi",
+  "weightCategory": "MEDIUM"
+}
+
+### GET all parcels
+GET http://localhost:3000/parcels
+Authorization: Bearer {{ADMIN_TOKEN}}
+
+### GET single parcel
+GET http://localhost:3000/parcels/{{parcel_id}}
+Authorization: Bearer {{ADMIN_TOKEN}}
+
+### UPDATE parcel (Admin only)
+PATCH http://localhost:3000/parcels/{{parcel_id}}
+Authorization: Bearer {{ADMIN_TOKEN}}
+Content-Type: application/json
+
+{
+  "status": "DELIVERED",
+  "destination": "Westlands, Nairobi"
+}
+
+### ASSIGN parcel to courier
+PATCH http://localhost:3000/parcels/assign
+Authorization: Bearer {{ADMIN_TOKEN}}
+Content-Type: application/json
+
+{
+  "parcelId": "4448e1d9-e3ae-430c-b71c-9ac7e5f6d8e8",
+  "courierId": "ff3179f5-26e7-4d8f-817c-659f2257fcec"
+}
+
+
+### DELETE parcel (soft delete - Admin only)
+DELETE http://localhost:3000/parcels/:id
+Authorization: Bearer {{ADMIN_TOKEN}}

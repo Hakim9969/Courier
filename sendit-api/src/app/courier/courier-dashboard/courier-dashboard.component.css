@@ -1,0 +1,35 @@
+/* Courier Dashboard specific styles */
+.availability-toggle {
+  transition: all 0.2s ease-in-out;
+}
+
+.availability-toggle:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.status-select {
+  min-width: 120px;
+}
+
+.status-select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive table adjustments */
+@media (max-width: 768px) {
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+} 

@@ -9,4 +9,10 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
+
+  @Get('health')
+  healthCheck(): string {
+    console.log('Backend - Health check endpoint called');
+    return 'Backend is healthy!';
+  }
 }

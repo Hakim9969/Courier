@@ -13,10 +13,15 @@ import { AuthService } from '../../shared/services/auth.service';
 })
 export class RegisterComponent {
   @Output() close = new EventEmitter<void>();
+  @Output() registerSuccess = new EventEmitter<void>();
+  @Output() redirectToLogin = new EventEmitter<void>();
+  @Output() registrationSuccessful = new EventEmitter<string>();
+  
   registerForm: FormGroup;
   showPassword = false;
   showConfirmPassword = false;
   error = '';
+  successMessage = '';
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.registerForm = this.fb.group({
@@ -32,20 +37,36 @@ export class RegisterComponent {
   onSubmit() {
     if (this.registerForm.invalid) return;
 
-    const { username, phoneNumber, email, password, confirmPassword,role } = this.registerForm.value;
+    const { username, phoneNumber, email, password, confirmPassword } = this.registerForm.value;
 
     if (password !== confirmPassword) {
       this.error = 'Passwords do not match';
+      this.successMessage = '';
       return;
     }
 
-    try {
-      this.authService.register({name: username, phoneNumber, email, password, role });
-      alert('Registration successful!');
-      this.router.navigate(['/login']);
-    } catch (err: any) {
-      this.error = err.message;
-    }
+    this.error = '';
+    this.successMessage = '';
+
+    this.authService.register({
+      name: username,
+      phoneNumber,
+      email,
+      password
+    }).subscribe({
+      next: () => {
+        this.successMessage = 'Registration successful! Redirecting to login...';
+        this.registerSuccess.emit();
+        // Emit the success message for the login modal
+        this.registrationSuccessful.emit('Registration successful! You can now log in with your credentials.');
+        // Emit redirect immediately to switch to login modal
+        this.redirectToLogin.emit();
+      },
+      error: err => {
+        this.error = err;
+        this.successMessage = '';
+      }
+    });
   }
 
   hasError(controlName: string, errorName: string): boolean {

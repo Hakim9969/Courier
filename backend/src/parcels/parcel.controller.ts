@@ -7,6 +7,7 @@ import {
   Patch,
   Delete,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { ParcelService } from './parcel.service';
 import { RolesGuard } from 'src/common/guards/roles-guard';
@@ -19,34 +20,67 @@ import { AssignCourierDto } from './dtos/assign-courier.dto';
 import { Role } from 'generated/prisma';
 
 @Controller('parcels')
-@UseGuards(JwtAuthGuard, RolesGuard)
 export class ParcelController {
   constructor(private readonly parcelService: ParcelService) {}
 
+  @Get('test')
+  test(): string {
+    console.log('Backend - Test endpoint called');
+    return 'Backend is working!';
+  }
+
+  @Get('my-parcels')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  findMyParcels(@Request() req): Promise<IParcel[]> {
+    return this.parcelService.findMyParcels(req.user.sub);
+  }
+
+  @Get('assigned-parcels')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.COURIER)
+  findAssignedParcels(@Request() req): Promise<IParcel[]> {
+    return this.parcelService.findAssignedParcels(req.user.sub);
+  }
+
   @Post()
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   create(@Body() dto: CreateParcelDto): Promise<IParcel> {
     return this.parcelService.create(dto);
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard, RolesGuard)
   findAll(): Promise<IParcel[]> {
     return this.parcelService.findAll();
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   findOne(@Param('id') id: string): Promise<IParcel> {
     return this.parcelService.findOne(id);
   }
 
   @Patch('assign')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   assignCourier(@Body() dto: AssignCourierDto): Promise<IParcel> {
-    console.log('Controller received DTO:', dto);
     return this.parcelService.assignCourier(dto.parcelId, dto.courierId);
+  }
+
+  @Patch('update-status/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.COURIER)
+  updateParcelStatus(
+    @Param('id') id: string,
+    @Body() body: { status: string },
+    @Request() req,
+  ): Promise<IParcel> {
+    return this.parcelService.updateParcelStatusByCourier(id, req.user.sub, body.status);
   }
   
   @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   update(
     @Param('id') id: string,
@@ -56,10 +90,9 @@ export class ParcelController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   delete(@Param('id') id: string): Promise<void> {
     return this.parcelService.softDelete(id);
   }
-
-  
 }

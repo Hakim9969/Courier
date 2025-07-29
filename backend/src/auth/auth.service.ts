@@ -24,7 +24,7 @@ export class AuthService {
     const exists = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
-    if (exists) throw new Error('Email already in use');
+    if (exists) throw new BadRequestException('Email already in use');
 
     const hashed = await bcrypt.hash(dto.password, 10);
     const user = await this.prisma.user.create({
@@ -33,14 +33,14 @@ export class AuthService {
         email: dto.email,
         phone: dto.phone,
         password: hashed,
-        role: 'CUSTOMER',
+        role: dto.role || 'CUSTOMER', // Allow role specification during registration
       },
     });
 
     // Send welcome email
     await this.mailerService.sendWelcomeEmail(user.email, user.name);
 
-    return this.signToken(user.id, user.email, user.role);
+    return this.signToken(user.id, user.email, user.role, user.name);
   }
 
   async login(dto: LoginDto) {
@@ -53,13 +53,19 @@ export class AuthService {
     const match = await bcrypt.compare(dto.password, user.password);
     if (!match) throw new UnauthorizedException('Invalid credentials');
 
-    return this.signToken(user.id, user.email, user.role);
+    return this.signToken(user.id, user.email, user.role, user.name);
   }
 
-  private signToken(id: string, email: string, role: string) {
-    const payload = { sub: id, email, role };
+  private signToken(id: string, email: string, role: string, name: string) {
+    const payload = { sub: id, email, role, name };
     return {
       access_token: this.jwt.sign(payload),
+      user: {
+        id,
+        email,
+        role,
+        name
+      }
     };
   }
 

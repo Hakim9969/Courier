@@ -4,7 +4,7 @@
 <div *ngIf="showLoginModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
   <div class="bg-white rounded-lg shadow-lg max-w-lg w-full relative">
     <button (click)="closeLoginModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
-    <app-login (close)="closeLoginModal()"></app-login>
+    <app-login (close)="closeLoginModal()" (loginSuccess)="onLoginSuccess()" (redirectToRegister)="onLoginRedirectToRegister()" [registrationSuccessMessage]="registrationSuccessMessage"></app-login>
   </div>
 </div>
 
@@ -12,7 +12,7 @@
 <div *ngIf="showRegisterModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
   <div class="bg-white rounded-lg shadow-lg max-w-lg w-full relative">
     <button (click)="closeRegisterModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
-    <app-register (close)="closeRegisterModal()"></app-register>
+    <app-register (close)="closeRegisterModal()" (redirectToLogin)="onRegisterSuccess()" (registrationSuccessful)="onRegistrationSuccessful($event)"></app-register>
   </div>
 </div>
 
@@ -29,7 +29,7 @@
             We provide fast, reliable, and secure delivery services worldwide. 
             Your packages are our priority.
           </p>
-          <button class="bg-blue-600 text-white px-8 py-4 rounded-md font-semibold hover:bg-blue-700 transition duration-300 text-lg" (click)="openRegisterModal()">
+          <button *ngIf="!isLoggedIn()" class="bg-blue-600 text-white px-8 py-4 rounded-md font-semibold hover:bg-blue-700 transition duration-300 text-lg" (click)="openRegisterModal()">
             Get Started
           </button>
           <div class="flex items-center mt-8 text-gray-500">

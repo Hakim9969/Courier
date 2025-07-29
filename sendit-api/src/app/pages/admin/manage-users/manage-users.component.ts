@@ -1,86 +1,67 @@
-import { CommonModule } from '@angular/common';
+// src/app/pages/admin/manage-users/manage-users.component.ts
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { User, UserService } from '../../../shared/services/user.service';
 import { FormsModule } from '@angular/forms';
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-  phoneNumber: string;
-  role: 'ADMIN' | 'CUSTOMER';
-  status: 'ACTIVE' | 'INACTIVE';
-  createdAt: string;
-}
 
 @Component({
   selector: 'app-manage-users',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './manage-users.component.html',
-  styleUrl: './manage-users.component.css'
+  styleUrls: ['./manage-users.component.css'],
 })
 export class ManageUsersComponent implements OnInit {
   users: User[] = [];
   filteredUsers: User[] = [];
+  error: string = '';
   searchText: string = '';
   searchRole: string = '';
 
-  ngOnInit() {
-    const savedUsers = localStorage.getItem('sendit_users');
-    if (savedUsers) {
-      const parsedUsers: User[] = JSON.parse(savedUsers);
+  constructor(private userService: UserService) {}
 
-      // Show all users (or filter if you only want customers)
-      this.users = parsedUsers.map(user => ({
-        ...user,
-        status: user.status ?? 'ACTIVE', // default if not set
-        createdAt: user.createdAt ?? new Date().toDateString(), // fallback
-      }));
-    }
-    this.filterUsers();
+  ngOnInit(): void {
+    this.loadUsers();
   }
 
-  filterUsers() {
-    const text = this.searchText.toLowerCase();
-    this.filteredUsers = this.users.filter(user => {
-      const matchesText =
-        user.name?.toLowerCase().includes(text) ||
-        user.email?.toLowerCase().includes(text);
-      const matchesRole = this.searchRole ? user.role === this.searchRole : true;
-      return matchesText && matchesRole;
+  loadUsers(): void {
+    this.userService.getAll().subscribe({
+      next: (res) => {
+        this.users = res;
+        this.filterUsers();
+      },
+      error: (err) =>
+        this.error = err.error?.message || 'Failed to load users'
     });
   }
 
-  deleteUser(userId: string): void {
-  if (confirm('Are you sure you want to delete this user?')) {
-    const savedUsers = localStorage.getItem('sendit_users');
-    let users: User[] = savedUsers ? JSON.parse(savedUsers) : [];
+  filterUsers(): void {
+    this.filteredUsers = this.users.filter(user => {
+      const matchSearch = this.searchText ?
+        user.name?.toLowerCase().includes(this.searchText.toLowerCase()) ||
+        user.email?.toLowerCase().includes(this.searchText.toLowerCase()) : true;
 
-    // Remove the user from the full list
-    users = users.filter(user => user.id !== userId);
-
-    // Save updated list
-    localStorage.setItem('sendit_users', JSON.stringify(users));
-
-    // Also update component state
-    this.users = users;
-    this.filterUsers();
-  }
- }
-
- updateUserRole(userId: string, newRole: 'ADMIN' | 'CUSTOMER') {
-  const savedUsers = localStorage.getItem('sendit_users');
-  const users: User[] = savedUsers ? JSON.parse(savedUsers) : [];
-
-  const user = users.find(u => u.id === userId);
-  if (user) {
-    user.role = newRole;
-    localStorage.setItem('sendit_users', JSON.stringify(users));
-    this.users = users;
-    this.filterUsers();
-  }
+      const matchRole = this.searchRole ? user.role === this.searchRole : true;
+      return matchSearch && matchRole;
+    });
   }
 
+  updateUserRole(id: string, newRole: 'CUSTOMER' | 'ADMIN'): void {
+    this.userService.updateRole(id, newRole).subscribe({
+      next: () => this.loadUsers(),
+      error: err =>
+        this.error = err.error?.message || 'Failed to update role'
+    });
+  }
 
+  deleteUser(id: string): void {
+    if (!confirm('Are you sure you want to delete this user?')) return;
+
+    this.userService.softDelete(id).subscribe({
+      next: () => this.loadUsers(),
+      error: err =>
+        this.error = err.error?.message || 'Failed to delete user'
+    });
+  }
 }

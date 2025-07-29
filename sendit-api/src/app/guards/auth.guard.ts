@@ -11,7 +11,7 @@ export class AuthGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
     if (!this.authService.isLoggedIn()) {
-      this.router.navigate(['/']);
+      this.router.navigate(['/login']);
       return false;
     }
 
@@ -26,7 +26,7 @@ export class AuthGuard implements CanActivate {
         } else if (user?.role === 'CUSTOMER') {
           this.router.navigate(['/customer/dashboard']);
         } else {
-          this.router.navigate(['/']);
+          this.router.navigate(['/login']);
         }
         return false;
       }

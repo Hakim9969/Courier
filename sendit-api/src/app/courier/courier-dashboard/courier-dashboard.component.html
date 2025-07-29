@@ -1,0 +1,171 @@
+<!-- Main Container -->
+<div class="min-h-screen bg-gray-100">
+  <app-navbar></app-navbar>
+
+  <main class="p-8">
+    <!-- Welcome Text -->
+    <div class="mb-8">
+      <h1 class="text-2xl font-semibold text-gray-900 mb-2">
+        Welcome {{ courierName }}.
+      </h1>
+      <p class="text-gray-600">Manage your assigned parcels and update delivery status.</p>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="flex justify-center items-center py-12">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <span class="ml-3 text-gray-600">Loading your assigned parcels...</span>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !loading" class="bg-red-50 border border-red-200 rounded-md p-4 mb-8">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-red-800">Error loading data</h3>
+          <div class="mt-2 text-sm text-red-700">
+            {{ error }}
+          </div>
+          <div class="mt-4">
+            <button 
+              (click)="loadCourierData()"
+              class="bg-red-100 text-red-800 px-3 py-2 rounded-md text-sm font-medium hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+              Try Again
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dashboard Content -->
+    <ng-container *ngIf="!loading && !error">
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <div class="text-center">
+            <h3 class="text-sm font-medium text-gray-500 mb-2">Total Assigned</h3>
+            <p class="text-3xl font-bold text-blue-600">{{ totalAssignedParcels }}</p>
+          </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <div class="text-center">
+            <h3 class="text-sm font-medium text-gray-500 mb-2">Pending</h3>
+            <p class="text-3xl font-bold text-orange-600">{{ pendingParcels }}</p>
+          </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <div class="text-center">
+            <h3 class="text-sm font-medium text-gray-500 mb-2">In Transit</h3>
+            <p class="text-3xl font-bold text-blue-600">{{ inTransitParcels }}</p>
+          </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <div class="text-center">
+            <h3 class="text-sm font-medium text-gray-500 mb-2">Delivered</h3>
+            <p class="text-3xl font-bold text-green-600">{{ deliveredParcels }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Availability Toggle -->
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-lg font-semibold text-gray-900">Availability Status</h2>
+            <p class="text-sm text-gray-600">Toggle your availability for new parcel assignments</p>
+          </div>
+          <div class="flex items-center space-x-4">
+            <span class="text-sm font-medium text-gray-700">
+              {{ isAvailable ? 'Available' : 'Not Available' }}
+            </span>
+            <button
+              (click)="updateAvailability()"
+              [disabled]="updatingAvailability"
+              class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              [class.bg-blue-600]="isAvailable"
+              [class.bg-gray-200]="!isAvailable">
+              <span
+                class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
+                [class.translate-x-6]="isAvailable"
+                [class.translate-x-1]="!isAvailable">
+              </span>
+            </button>
+            <div *ngIf="updatingAvailability" class="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Assigned Parcels Table -->
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-lg font-semibold text-gray-900">Assigned Parcels</h2>
+          <p class="text-sm text-gray-600">Manage your assigned parcels and update delivery status</p>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead class="bg-gray-50 border-b border-gray-200">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Parcel ID</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Receiver</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pickup Address</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Destination</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Weight</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <ng-container *ngFor="let parcel of assignedParcels">
+                <tr class="hover:bg-gray-50">
+                  <td class="px-6 py-4 text-sm text-blue-600 font-medium">{{ parcel.id }}</td>
+                  <td class="px-6 py-4 text-sm">{{ parcel.receiverName }}</td>
+                  <td class="px-6 py-4 text-sm">{{ parcel.pickupAddress }}</td>
+                  <td class="px-6 py-4 text-sm">{{ parcel.destination }}</td>
+                  <td class="px-6 py-4 text-sm">{{ parcel.weightCategory }}</td>
+                  <td class="px-6 py-4">
+                    <span class="px-2 py-1 text-xs font-medium rounded-full" [ngClass]="getStatusColor(parcel.status)">
+                      {{ parcel.status }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 text-sm">
+                    <select
+                      #statusSelect
+                      (change)="updateParcelStatus(parcel.id, statusSelect.value)"
+                      [value]="parcel.status"
+                      class="border border-gray-300 rounded px-2 py-1 text-xs"
+                      [disabled]="getStatusOptions(parcel.status).length === 0">
+                      <option [value]="parcel.status">{{ parcel.status }}</option>
+                      <option *ngFor="let status of getStatusOptions(parcel.status)" [value]="status">
+                        {{ status }}
+                      </option>
+                    </select>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="assignedParcels.length === 0" class="text-center py-12">
+          <div class="text-gray-500">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+            </svg>
+            <h3 class="mt-2 text-sm font-medium text-gray-900">No assigned parcels</h3>
+            <p class="mt-1 text-sm text-gray-500">You don't have any parcels assigned to you yet.</p>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </main>
+  <app-footer></app-footer>
+</div> 

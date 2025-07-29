@@ -1,12 +1,16 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
+import { AuthService } from '../shared/services/auth.service';
 
 export const CustomerGuard: CanActivateFn = (route, state) => {
-  const role = localStorage.getItem('role');
-  if (role === 'CUSTOMER') {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+  
+  const user = authService.getCurrentUser();
+  if (user && user.role === 'CUSTOMER') {
     return true;
   }
-  const router = inject(Router);
+  
   router.navigate(['/login']);
   return false;
 };

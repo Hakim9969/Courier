@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -9,7 +9,7 @@ interface User {
   id: string;
   name: string;
   email: string;
-  role: 'customer' | 'admin';
+  role: 'ADMIN' | 'CUSTOMER' | 'COURIER';
 }
 
 @Component({
@@ -22,9 +22,9 @@ interface User {
 export class NavbarComponent implements OnInit, OnDestroy {
   isLoggedIn = false;
   currentUser: User | null = null;
-  private authSubscription: Subscription | null = null;
   private routerSubscription: Subscription | null = null;
   currentRoute: string = '';
+  showDropdown = false;
 
   @Output() loginClick = new EventEmitter<void>();
   @Output() registerClick = new EventEmitter<void>();
@@ -35,22 +35,21 @@ export class NavbarComponent implements OnInit, OnDestroy {
     // Check auth status on initialization
     this.checkAuthStatus();
     this.currentRoute = this.router.url;
+    
     // Listen to router events to refresh auth state on navigation
     this.routerSubscription = this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: any) => {
         this.checkAuthStatus();
         this.currentRoute = event.urlAfterRedirects || event.url;
+        this.closeDropdown(); // Close dropdown on navigation
       });
 
-    // Also listen to storage events for cross-tab synchronization
+    // Listen to storage events for cross-tab synchronization
     window.addEventListener('storage', this.handleStorageChange.bind(this));
   }
 
   ngOnDestroy() {
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
-    }
     if (this.routerSubscription) {
       this.routerSubscription.unsubscribe();
     }
@@ -58,99 +57,141 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   private handleStorageChange(event: StorageEvent) {
-    if (event.key === 'sendit_current_user' || event.key === 'token') {
+    if (event.key === 'token') {
       this.checkAuthStatus();
     }
   }
 
   private checkAuthStatus() {
-    const token = localStorage.getItem('token');
-    const userInfo = localStorage.getItem('sendit_current_user');
-
-    if (token && userInfo) {
-      try {
-        const user = JSON.parse(userInfo);
-        // Map the role from backend format to frontend format
-        this.currentUser = {
-          ...user,
-          role: user.role?.toLowerCase() === 'admin' ? 'admin' : 'customer'
-        };
+    if (this.authService.isLoggedIn()) {
+      const user = this.authService.getCurrentUser();
+      if (user) {
+        this.currentUser = user;
         this.isLoggedIn = true;
-      } catch (error) {
-        console.error('Error parsing user info:', error);
+      } else {
         this.clearAuthData();
       }
     } else {
-      this.isLoggedIn = false;
-      this.currentUser = null;
+      this.clearAuthData();
     }
   }
 
+  // Public method to refresh auth status (can be called from other components)
+  refreshAuthStatus() {
+    this.checkAuthStatus();
+  }
+
   private clearAuthData() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('sendit_current_user'); // ✅ Fixed key name
-    localStorage.removeItem('role');
     this.isLoggedIn = false;
     this.currentUser = null;
   }
 
   openLogin() {
-    this.router.navigate(['/'], { queryParams: { login: 'true' } });
+    this.loginClick.emit();
   }
 
   openRegister() {
-    this.router.navigate(['/'], { queryParams: { register: 'true' } });
+    this.registerClick.emit();
   }
+
+
 
   navigateToDashboard() {
     if (!this.currentUser) return;
 
-    const dashboardRoute = this.currentUser.role === 'admin' 
-      ? '/admin/dashboard' 
-      : '/customer/dashboard';
+    let dashboardRoute = '/dashboard';
+    
+    if (this.currentUser.role === 'ADMIN') {
+      dashboardRoute = '/admin/dashboard';
+    } else if (this.currentUser.role === 'COURIER') {
+      dashboardRoute = '/courier/dashboard';
+    }
     
     this.router.navigate([dashboardRoute]);
   }
 
   logout() {
-    // Clear auth token/session and user info
+    this.authService.logout();
     this.clearAuthData();
-    
-    // Redirect to home page
     this.router.navigate(['/']);
-  }
-
-  // Method to be called after successful login (from parent component)
-  onLoginSuccess(user: User, token: string) {
-    this.currentUser = {
-      ...user,
-      role: user.role?.toLowerCase() === 'admin' ? 'admin' : 'customer'
-    };
-    this.isLoggedIn = true;
-
-    // Store user info and token
-    localStorage.setItem('token', token);
-    localStorage.setItem('sendit_current_user', JSON.stringify(user));
   }
 
   // Get display name for dashboard button
   getDashboardLabel(): string {
-    return this.currentUser?.role === 'admin' ? 'Admin Dashboard' : 'Dashboard';
+    if (!this.currentUser) return 'Dashboard';
+    
+    switch (this.currentUser.role) {
+      case 'ADMIN':
+        return 'Admin Dashboard';
+      case 'COURIER':
+        return 'Courier Dashboard';
+      default:
+        return 'Dashboard';
+    }
   }
 
   // Get user's first name for display
   getUserDisplayName(): string {
     if (!this.currentUser) return '';
-    return this.currentUser.name.split(' ')[0]; // Get first name only
+    return this.currentUser.name?.split(' ')[0] || this.currentUser.email; // Get first name or email
   }
 
   // Get dashboard route for routerLink
   getDashboardRoute(): string {
     if (!this.currentUser) return '/';
-    return this.currentUser.role === 'admin' ? '/admin/dashboard' : '/customer/dashboard';
+    
+    switch (this.currentUser.role) {
+      case 'ADMIN':
+        return '/admin/dashboard';
+      case 'COURIER':
+        return '/courier/dashboard';
+      default:
+        return '/dashboard';
+    }
   }
 
   isActiveRoute(route: string): boolean {
     return this.currentRoute === route;
+  }
+
+  // Get user initials for the avatar
+  getUserInitials(): string {
+    if (!this.currentUser?.name) return this.currentUser?.email?.charAt(0).toUpperCase() || 'U';
+    
+    const names = this.currentUser.name.split(' ');
+    if (names.length >= 2) {
+      return (names[0].charAt(0) + names[1].charAt(0)).toUpperCase();
+    }
+    return names[0].charAt(0).toUpperCase();
+  }
+
+  // Toggle dropdown visibility
+  toggleDropdown(event?: Event) {
+    if (event) {
+      event.stopPropagation();
+    }
+    this.showDropdown = !this.showDropdown;
+  }
+
+  // Close dropdown
+  closeDropdown() {
+    this.showDropdown = false;
+  }
+
+  // Handle logout with dropdown close
+  handleLogout() {
+    this.closeDropdown();
+    this.logout();
+  }
+
+  // Close dropdown when clicking outside
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event) {
+    const target = event.target as HTMLElement;
+    const dropdownContainer = target.closest('.user-dropdown');
+    
+    if (!dropdownContainer) {
+      this.closeDropdown();
+    }
   }
 }

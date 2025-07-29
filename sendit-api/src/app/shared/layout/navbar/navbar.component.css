@@ -35,3 +35,39 @@ button:focus, a[routerLink]:focus {
   border-radius: 0;
   padding-bottom: 0.2rem;
 }
+
+/* Dropdown animations */
+.user-dropdown {
+  position: relative;
+}
+
+.user-dropdown .absolute {
+  animation: dropdownFadeIn 0.2s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* User avatar hover effects */
+.user-dropdown button:hover {
+  transform: scale(1.05);
+}
+
+/* Dropdown menu item hover effects */
+.user-dropdown .absolute a:hover,
+.user-dropdown .absolute button:hover {
+  background-color: #f3f4f6;
+}
+
+/* Ensure dropdown is above other elements */
+.user-dropdown .absolute {
+  z-index: 1000;
+}

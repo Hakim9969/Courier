@@ -3,15 +3,18 @@
 
   <div class="flex items-center gap-4">
     <!-- Navigation Links -->
-    <a routerLink="/" 
-       [ngClass]="isActiveRoute('/') ? 'underline-nav-link' : ''"
-       class="font-medium transition-colors duration-200">Home</a>
-    <a routerLink="/about" 
-       [ngClass]="isActiveRoute('/about') ? 'underline-nav-link' : ''"
-       class="font-medium transition-colors duration-200">About Us</a>
-    <a routerLink="/track-order" 
-       [ngClass]="isActiveRoute('/track-order') ? 'underline-nav-link' : ''"
-       class="font-medium transition-colors duration-200">Track Order</a>
+    <ng-container *ngIf="!isLoggedIn || currentUser?.role !== 'ADMIN'">
+      <a routerLink="/" 
+         [ngClass]="isActiveRoute('/') ? 'underline-nav-link' : ''"
+         class="font-medium transition-colors duration-200">Home</a>
+      <a routerLink="/about" 
+         [ngClass]="isActiveRoute('/about') ? 'underline-nav-link' : ''"
+         class="font-medium transition-colors duration-200">About Us</a>
+      <a *ngIf="isLoggedIn && currentUser?.role === 'CUSTOMER'"
+         routerLink="/track-order"
+         [ngClass]="isActiveRoute('/track-order') ? 'underline-nav-link' : ''"
+         class="font-medium transition-colors duration-200">Track Your Parcel</a>
+    </ng-container>
 
     <!-- Authentication Section -->
     <div class="flex items-center gap-3">
@@ -29,24 +32,54 @@
 
       <!-- Logged In User Section -->
       <div *ngIf="isLoggedIn" class="flex items-center gap-3">
-        <!-- User Greeting -->
-        <span class="text-gray-700 font-medium hidden sm:block">
-          Hello, {{ getUserDisplayName() }}!
-        </span>
+        <!-- User Avatar with Dropdown -->
+        <div class="relative user-dropdown">
+          <!-- User Avatar Button -->
+          <button 
+            (click)="toggleDropdown($event)"
+            class="flex items-center justify-center w-10 h-10 bg-blue-600 text-white rounded-full font-semibold text-lg hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            [title]="currentUser?.email">
+            {{ getUserInitials() }}
+          </button>
 
-        <!-- Dashboard Button -->
-        <a *ngIf="getDashboardLabel()" 
-           [routerLink]="getDashboardRoute()" 
-           [ngClass]="isActiveRoute(getDashboardRoute()) ? 'underline-nav-link' : ''"
-           class="font-medium transition-colors duration-200 cursor-pointer">
-          {{ getDashboardLabel() }}
-        </a>
+          <!-- Dropdown Menu -->
+          <div 
+            *ngIf="showDropdown"
+            class="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
+            
+            <!-- User Info Section -->
+            <div class="px-4 py-3 border-b border-gray-100">
+              <p class="text-sm font-medium text-gray-900">{{ currentUser?.name || 'User' }}</p>
+              <p class="text-sm text-gray-500 truncate">{{ currentUser?.email }}</p>
+            </div>
 
-        <!-- Logout Button -->
-        <a (click)="logout()"
-           class="font-medium transition-colors duration-200 text-red-600 cursor-pointer">
-          Logout
-        </a>
+            <!-- Dashboard Link -->
+            <a 
+              [routerLink]="getDashboardRoute()"
+              (click)="closeDropdown()"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150 cursor-pointer">
+              <div class="flex items-center">
+                <svg class="w-4 h-4 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v6H8V5z"></path>
+                </svg>
+                {{ getDashboardLabel() }}
+              </div>
+            </a>
+
+            <!-- Logout Button -->
+            <button 
+              (click)="handleLogout()"
+              class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-150 cursor-pointer">
+              <div class="flex items-center">
+                <svg class="w-4 h-4 mr-3 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                </svg>
+                Logout
+              </div>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

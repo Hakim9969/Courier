@@ -1,45 +1,85 @@
 <app-navbar></app-navbar>
 
 <div class="track-order-container bg-gray-100 min-h-screen flex flex-col items-center py-10">
-  <ng-container *ngIf="parcel; else noParcel">
-    <div class="track-order-summary-row flex flex-wrap justify-center gap-4 mb-6">
-      <div class="track-order-summary-box">
-        <span class="track-order-summary-icon">🔎</span>
-        <div class="track-order-summary-label">Parcel ID:</div>
-        <div class="track-order-summary-value">{{ parcel.id }}</div>
+  <!-- Loading State -->
+  <div *ngIf="loading" class="flex justify-center items-center py-12">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    <span class="ml-3 text-gray-600">Loading parcel...</span>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="bg-red-50 border border-red-200 rounded-md p-4 mb-8 max-w-4xl w-full">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+        </svg>
       </div>
-      <div class="track-order-summary-box">
-        <span class="track-order-summary-icon">✉️</span>
-        <div class="track-order-summary-label">Sender Email:</div>
-        <div class="track-order-summary-value">{{ parcel.senderEmail || '-' }}</div>
-      </div>
-      <div class="track-order-summary-box">
-        <span class="track-order-summary-icon">📧</span>
-        <div class="track-order-summary-label">Receiver Email:</div>
-        <div class="track-order-summary-value">{{ parcel.email || '-' }}</div>
-      </div>
-      <div class="track-order-summary-box">
-        <span class="track-order-summary-icon">📍</span>
-        <div class="track-order-summary-label">Pickup Location:</div>
-        <div class="track-order-summary-value">{{ parcel.pickupLocation }}</div>
-      </div>
-      <div class="track-order-summary-box">
-        <span class="track-order-summary-icon">🏠</span>
-        <div class="track-order-summary-label">Destination:</div>
-        <div class="track-order-summary-value">{{ parcel.deliveryAddress }}</div>
+      <div class="ml-3">
+        <h3 class="text-sm font-medium text-red-800">Error loading parcel</h3>
+        <div class="mt-2 text-sm text-red-700">
+          {{ error }}
+        </div>
       </div>
     </div>
-    <div class="track-order-map-box bg-white rounded-lg shadow p-2 w-full max-w-4xl h-[400px]">
-  <div #mapContainer class="w-full h-full rounded-lg"></div>
-</div>
+  </div>
+
+  <!-- Parcel Content -->
+  <ng-container *ngIf="parcel && !loading && !error">
+    <div class="track-order-summary-row flex flex-wrap justify-center gap-4 mb-6">
+      <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 rounded-lg shadow-md" style="min-width: 180px;">
+        <div class="flex items-center mb-2">
+          <span class="text-lg mr-2">🔍</span>
+          <h4 class="text-sm font-semibold">Parcel ID</h4>
+        </div>
+        <p class="text-sm font-mono bg-white bg-opacity-20 px-2 py-1 rounded break-all">{{ parcel.id }}</p>
+      </div>
+      <div class="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-4 rounded-lg shadow-md" style="min-width: 180px;">
+        <div class="flex items-center mb-2">
+          <span class="text-lg mr-2">📦</span>
+          <h4 class="text-sm font-semibold">Status</h4>
+        </div>
+        <p class="text-sm font-medium bg-white bg-opacity-20 px-2 py-1 rounded">{{ parcel.status }}</p>
+      </div>
+    </div>
+
+    <!-- Map Section -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8 max-w-4xl w-full">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">Parcel Route</h2>
+      
+      <!-- Map Loading State -->
+      <div *ngIf="mapLoading" class="flex items-center justify-center h-64">
+        <div class="flex items-center space-x-2">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+          <span class="text-gray-600">Loading map coordinates...</span>
+        </div>
+      </div>
+      
+      <!-- Map Content -->
+      <ng-container *ngIf="!mapLoading && pickupLocation && destinationLocation">
+        <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-blue-50 p-3 rounded-lg">
+            <h4 class="text-sm font-medium text-blue-800 mb-1">Pickup Location</h4>
+            <p class="text-sm text-blue-700">{{ pickupLocation.address }}</p>
+          </div>
+          <div class="bg-red-50 p-3 rounded-lg">
+            <h4 class="text-sm font-medium text-red-800 mb-1">Destination</h4>
+            <p class="text-sm text-red-700">{{ destinationLocation.address }}</p>
+          </div>
+        </div>
+        
+        <app-parcel-map 
+          [pickupLocation]="pickupLocation"
+          [destinationLocation]="destinationLocation"
+          height="400px">
+        </app-parcel-map>
+      </ng-container>
+    </div>
 
     <button (click)="goToDashboard()" class="mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold shadow hover:bg-blue-700 transition">
       {{ getDashboardButtonLabel() }}
     </button>
   </ng-container>
-  <ng-template #noParcel>
-    <div class="text-gray-600 text-lg mt-12">No parcel found to track.</div>
-  </ng-template>
 </div>
 
 <app-footer></app-footer>

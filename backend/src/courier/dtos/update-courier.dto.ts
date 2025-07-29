@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsPhoneNumber } from 'class-validator';
+import { IsOptional, IsString, IsPhoneNumber, IsBoolean, IsNumber } from 'class-validator';
 
 export class UpdateCourierDto {
   @IsOptional()
@@ -10,6 +10,14 @@ export class UpdateCourierDto {
   phone?: string;
 
   @IsOptional()
-  @IsString()
-  vehicleId?: string;
+  @IsBoolean()
+  isAvailable?: boolean;
+
+  @IsOptional()
+  @IsNumber()
+  currentLat?: number;
+
+  @IsOptional()
+  @IsNumber()
+  currentLng?: number;
 }

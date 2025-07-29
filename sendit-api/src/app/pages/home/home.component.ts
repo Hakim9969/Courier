@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../shared/layout/navbar/navbar.component';
 import { FooterComponent } from '../../shared/layout/footer/footer.component';
 import { LoginComponent } from '../../auth/login/login.component';
 import { RegisterComponent } from '../../auth/register/register.component';
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -14,6 +15,8 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
+  @ViewChild(NavbarComponent) navbar!: NavbarComponent;
+
   testimonials = [
     {
       name: 'John Smith',
@@ -38,8 +41,9 @@ export class HomeComponent {
 
   showLoginModal = false;
   showRegisterModal = false;
+  registrationSuccessMessage = '';
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private authService: AuthService) {
     this.route.queryParams.subscribe(params => {
       if (params['login']) {
         this.openLoginModal();
@@ -50,16 +54,51 @@ export class HomeComponent {
     });
   }
 
+  isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
+  }
+
   openLoginModal() {
     this.showLoginModal = true;
   }
+  
   closeLoginModal() {
     this.showLoginModal = false;
+    this.registrationSuccessMessage = '';
   }
+  
   openRegisterModal() {
     this.showRegisterModal = true;
   }
+  
   closeRegisterModal() {
     this.showRegisterModal = false;
+  }
+
+  // Method to refresh navbar after login
+  onLoginSuccess() {
+    if (this.navbar) {
+      this.navbar.refreshAuthStatus();
+    }
+  }
+
+  // Method to handle redirect from register to login
+  onRegisterSuccess() {
+    this.registrationSuccessMessage = '';
+    this.closeRegisterModal();
+    this.openLoginModal();
+  }
+
+  // Method to handle successful registration with message
+  onRegistrationSuccessful(message: string) {
+    this.registrationSuccessMessage = message;
+    this.closeRegisterModal();
+    this.openLoginModal();
+  }
+
+  // Method to handle redirect from login to register
+  onLoginRedirectToRegister() {
+    this.closeLoginModal();
+    this.openRegisterModal();
   }
 }

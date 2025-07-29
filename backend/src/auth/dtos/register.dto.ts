@@ -5,6 +5,7 @@ export const RegisterSchema = Joi.object({
   email: Joi.string().email().required(),
   phone: Joi.string().required(),
   password: Joi.string().min(6).required(),
+  role: Joi.string().valid('ADMIN', 'CUSTOMER', 'COURIER').optional(),
 });
 
 export class RegisterDto {
@@ -12,4 +13,5 @@ export class RegisterDto {
   email: string;
   phone: string;
   password: string;
+  role?: 'ADMIN' | 'CUSTOMER' | 'COURIER';
 }

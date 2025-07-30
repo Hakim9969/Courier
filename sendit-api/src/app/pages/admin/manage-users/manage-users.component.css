@@ -1,0 +1,67 @@
+/* Mobile responsive styles for manage users */
+@media (max-width: 768px) {
+  /* Ensure form inputs are touch-friendly */
+  input, select {
+    min-height: 44px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  /* Adjust spacing for mobile */
+  .space-y-4 > * + * {
+    margin-top: 1rem;
+  }
+  
+  /* Make buttons more touch-friendly */
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Ensure cards are properly spaced */
+  .space-y-4 > * + * {
+    margin-top: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Adjust padding for very small screens */
+  .p-4 {
+    padding: 0.75rem;
+  }
+  
+  /* Ensure text is readable */
+  .text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+  
+  /* Make sure cards don't overflow */
+  .bg-white {
+    border-radius: 0.5rem;
+  }
+}
+
+/* Ensure dropdowns are properly contained */
+select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Prevent dropdown overflow */
+select option {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Mobile card styles */
+.mobile-card {
+  transition: all 0.2s ease-in-out;
+}
+
+.mobile-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}

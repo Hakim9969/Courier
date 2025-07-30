@@ -71,3 +71,54 @@ button:focus, a[routerLink]:focus {
 .user-dropdown .absolute {
   z-index: 1000;
 }
+
+/* Mobile Navigation Styles */
+.mobile-nav-link {
+  color: #374151;
+  font-weight: 500;
+}
+
+.mobile-nav-link:hover {
+  background-color: #f3f4f6;
+  color: #1f2937;
+}
+
+.mobile-active-link {
+  background-color: #2563eb;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.mobile-active-link:hover {
+  background-color: #1d4ed8;
+  color: #ffffff;
+}
+
+/* Mobile menu animation */
+.mobile-menu-enter {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .user-dropdown .absolute {
+    right: -1rem;
+    width: 12rem;
+  }
+}
+
+/* Ensure mobile menu is above other content */
+.md\:hidden {
+  z-index: 50;
+}

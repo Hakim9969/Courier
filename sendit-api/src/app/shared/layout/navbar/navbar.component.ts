@@ -25,6 +25,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private routerSubscription: Subscription | null = null;
   currentRoute: string = '';
   showDropdown = false;
+  showMobileMenu = false;
 
   @Output() loginClick = new EventEmitter<void>();
   @Output() registerClick = new EventEmitter<void>();
@@ -42,7 +43,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .subscribe((event: any) => {
         this.checkAuthStatus();
         this.currentRoute = event.urlAfterRedirects || event.url;
-        this.closeDropdown(); // Close dropdown on navigation
+        this.closeAllMenus(); // Close all menus on navigation
       });
 
     // Listen to storage events for cross-tab synchronization
@@ -178,6 +179,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.showDropdown = false;
   }
 
+  // Close all menus
+  closeAllMenus() {
+    this.closeDropdown();
+    this.closeMobileMenu();
+  }
+
   // Handle logout with dropdown close
   handleLogout() {
     this.closeDropdown();
@@ -192,6 +199,27 @@ export class NavbarComponent implements OnInit, OnDestroy {
     
     if (!dropdownContainer) {
       this.closeDropdown();
+    }
+  }
+
+  // Toggle mobile menu
+  toggleMobileMenu() {
+    this.showMobileMenu = !this.showMobileMenu;
+    if (this.showMobileMenu) {
+      this.closeDropdown(); // Close dropdown when opening mobile menu
+    }
+  }
+
+  // Close mobile menu
+  closeMobileMenu() {
+    this.showMobileMenu = false;
+  }
+
+  // Close mobile menu on navigation
+  @HostListener('window:resize')
+  onResize() {
+    if (window.innerWidth >= 768) { // md breakpoint
+      this.closeMobileMenu();
     }
   }
 }

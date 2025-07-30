@@ -1,3 +1,250 @@
+/* Mobile Responsive Styles for My Parcels Component */
+
+/* General mobile adjustments */
+@media (max-width: 768px) {
+  /* Ensure proper spacing on mobile */
+  .min-h-screen {
+    min-height: 100vh;
+  }
+  
+  /* Adjust container padding for mobile */
+  .min-h-screen.bg-white {
+    padding: 1rem;
+  }
+  
+  /* Make title more readable on mobile */
+  h1 {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+  
+  /* Adjust loading spinner size for mobile */
+  .animate-spin {
+    min-width: 32px;
+    min-height: 32px;
+  }
+  
+  /* Make loading text more readable */
+  .text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+}
+
+/* Mobile Card View Styles */
+@media (max-width: 1024px) {
+  /* Mobile card container */
+  .lg\:hidden {
+    display: block;
+  }
+  
+  /* Individual parcel cards */
+  .lg\:hidden .space-y-4 > div {
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Card header with receiver name and status */
+  .lg\:hidden .flex.justify-between.items-start {
+    margin-bottom: 0.75rem;
+  }
+  
+  /* Receiver name styling */
+  .lg\:hidden h3 {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #111827;
+    margin-bottom: 0.25rem;
+  }
+  
+  /* Parcel ID styling */
+  .lg\:hidden p.text-xs {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Status badge styling */
+  .lg\:hidden .px-2.py-1.text-xs {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    font-weight: 500;
+  }
+  
+  /* Parcel details section */
+  .lg\:hidden .space-y-2 {
+    margin-bottom: 1rem;
+  }
+  
+  /* Detail row styling */
+  .lg\:hidden .flex.items-center.text-sm {
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Label styling */
+  .lg\:hidden .text-gray-500.w-20 {
+    width: 5rem;
+    color: #6b7280;
+    font-weight: 500;
+  }
+  
+  /* Value styling */
+  .lg\:hidden .text-gray-900 {
+    color: #111827;
+    flex: 1;
+  }
+  
+  /* Action buttons container */
+  .lg\:hidden .flex.justify-between.items-center {
+    border-top: 1px solid #f3f4f6;
+    padding-top: 0.75rem;
+  }
+  
+  /* Action button styling */
+  .lg\:hidden button {
+    font-size: 0.875rem;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    transition: all 0.2s;
+  }
+  
+  .lg\:hidden button:hover {
+    background-color: #f3f4f6;
+  }
+}
+
+/* Search and Filter Controls Mobile Responsiveness */
+@media (max-width: 1024px) {
+  /* Stack controls vertically on mobile */
+  .flex.flex-col.lg\:flex-row {
+    gap: 1rem;
+  }
+  
+  /* Full width inputs on mobile */
+  .w-full.lg\:w-64,
+  .w-full.lg\:w-48 {
+    width: 100%;
+  }
+  
+  /* Touch-friendly input sizing */
+  input, select {
+    min-height: 44px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  /* Better spacing for mobile */
+  .gap-4 {
+    gap: 1rem;
+  }
+}
+
+/* Very small screen adjustments */
+@media (max-width: 480px) {
+  /* Reduce padding further for very small screens */
+  .min-h-screen.bg-white {
+    padding: 0.75rem;
+  }
+  
+  /* Make cards more compact */
+  .lg\:hidden .space-y-4 > div {
+    padding: 0.75rem;
+  }
+  
+  /* Smaller text for very small screens */
+  .lg\:hidden h3 {
+    font-size: 0.8rem;
+  }
+  
+  .lg\:hidden p.text-xs {
+    font-size: 0.7rem;
+  }
+  
+  .lg\:hidden .flex.items-center.text-sm {
+    font-size: 0.8rem;
+  }
+  
+  /* Adjust margins for better spacing */
+  .mb-4 {
+    margin-bottom: 0.75rem;
+  }
+  
+  .mb-3 {
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Touch-friendly improvements */
+@media (max-width: 768px) {
+  /* Ensure buttons are touch-friendly */
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Make error state more touch-friendly */
+  .bg-red-50 {
+    padding: 1rem;
+  }
+  
+  /* Ensure proper spacing in error messages */
+  .flex {
+    gap: 0.75rem;
+  }
+  
+  /* Better button spacing in mobile cards */
+  .lg\:hidden .flex.justify-between.items-center button {
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+/* Landscape orientation adjustments */
+@media (max-width: 768px) and (orientation: landscape) {
+  /* Reduce vertical spacing in landscape mode */
+  .mb-4 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .py-8 {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+  
+  /* Make cards more compact in landscape */
+  .lg\:hidden .space-y-4 > div {
+    padding: 0.5rem;
+  }
+  
+  /* Reduce spacing between elements */
+  .lg\:hidden .space-y-2 > * + * {
+    margin-top: 0.25rem;
+  }
+}
+
+/* Modal Responsiveness */
+@media (max-width: 768px) {
+  /* Adjust modal positioning for mobile */
+  .fixed.inset-0 {
+    padding: 0.5rem;
+  }
+  
+  /* Make modal more mobile-friendly */
+  .relative.top-2 {
+    top: 0.5rem;
+  }
+  
+  /* Ensure modal content is scrollable */
+  .overflow-y-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Existing parcel details styles with mobile improvements */
 .parcel-details-section {
   display: flex;
   flex-direction: column;
@@ -33,6 +280,7 @@
   box-shadow: 0 2px 8px rgba(30,41,59,0.04);
   transition: box-shadow 0.18s, border-color 0.18s;
 }
+
 .parcel-detail-box:hover {
   box-shadow: 0 4px 16px rgba(30,41,59,0.10);
   border-color: #b6c6e3;
@@ -82,6 +330,7 @@
   font-size: 1.3rem;
 }
 
+/* Enhanced mobile responsiveness for parcel details */
 @media (max-width: 900px) {
   .parcel-details-grid {
     grid-template-columns: 1fr 1fr;
@@ -101,5 +350,58 @@
   }
   .parcel-details-section {
     padding: 0.7rem 0.2rem 0.7rem 0.2rem;
+  }
+  
+  /* Make modal more compact on very small screens */
+  .parcel-details-section {
+    margin: 0.5rem;
+    border-radius: 1rem;
+  }
+  
+  /* Adjust track button for mobile */
+  .parcel-details-track {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+  }
+}
+
+/* High DPI screen adjustments */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Ensure crisp text rendering on high DPI screens */
+  .text-xs, .text-sm, .text-lg, .text-xl, .text-2xl {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  /* Disable animations for users who prefer reduced motion */
+  .animate-spin {
+    animation: none;
+  }
+  
+  /* Remove hover effects for reduced motion */
+  .parcel-detail-box:hover {
+    box-shadow: 0 2px 8px rgba(30,41,59,0.04);
+    border-color: #ececec;
+  }
+}
+
+/* Print styles */
+@media print {
+  /* Hide mobile-specific elements for print */
+  .lg\:hidden {
+    display: none;
+  }
+  
+  /* Show desktop table for print */
+  .hidden.lg\:block {
+    display: block;
+  }
+  
+  /* Ensure proper page breaks */
+  .space-y-4 > div {
+    page-break-inside: avoid;
   }
 }

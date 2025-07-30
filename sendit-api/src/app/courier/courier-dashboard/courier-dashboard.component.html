@@ -2,13 +2,36 @@
 <div class="min-h-screen bg-gray-100">
   <app-navbar></app-navbar>
 
-  <main class="p-8">
+  <!-- Success Alert -->
+  <div *ngIf="showSuccessAlert" class="fixed top-4 right-4 z-50 animate-slide-in">
+    <div class="bg-green-50 border border-green-200 rounded-lg p-4 shadow-lg max-w-sm">
+      <div class="flex items-start">
+        <div class="flex-shrink-0">
+          <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <div class="ml-3 flex-1">
+          <p class="text-sm font-medium text-green-800">{{ successMessage }}</p>
+        </div>
+        <div class="ml-4 flex-shrink-0">
+          <button (click)="closeSuccessAlert()" class="inline-flex text-green-400 hover:text-green-600 focus:outline-none focus:text-green-600 transition-colors duration-200">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="p-4 lg:p-8">
     <!-- Welcome Text -->
-    <div class="mb-8">
-      <h1 class="text-2xl font-semibold text-gray-900 mb-2">
+    <div class="mb-6 lg:mb-8">
+      <h1 class="text-xl lg:text-2xl font-semibold text-gray-900 mb-2">
         Welcome {{ courierName }}.
       </h1>
-      <p class="text-gray-600">Manage your assigned parcels and update delivery status.</p>
+      <p class="text-gray-600 text-sm lg:text-base">Manage your assigned parcels and update delivery status.</p>
     </div>
 
     <!-- Loading State -->
@@ -18,7 +41,7 @@
     </div>
 
     <!-- Error State -->
-    <div *ngIf="error && !loading" class="bg-red-50 border border-red-200 rounded-md p-4 mb-8">
+    <div *ngIf="error && !loading" class="bg-red-50 border border-red-200 rounded-md p-4 mb-6 lg:mb-8">
       <div class="flex">
         <div class="flex-shrink-0">
           <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
@@ -44,51 +67,65 @@
     <!-- Dashboard Content -->
     <ng-container *ngIf="!loading && !error">
       <!-- Stats Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6 lg:mb-8">
+        <div class="bg-white p-4 lg:p-6 rounded-lg shadow-sm border border-gray-200">
           <div class="text-center">
-            <h3 class="text-sm font-medium text-gray-500 mb-2">Total Assigned</h3>
-            <p class="text-3xl font-bold text-blue-600">{{ totalAssignedParcels }}</p>
+            <h3 class="text-xs lg:text-sm font-medium text-gray-500 mb-1 lg:mb-2">Total Assigned</h3>
+            <p class="text-2xl lg:text-3xl font-bold text-blue-600">{{ totalAssignedParcels }}</p>
           </div>
         </div>
 
-        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div class="bg-white p-4 lg:p-6 rounded-lg shadow-sm border border-gray-200">
           <div class="text-center">
-            <h3 class="text-sm font-medium text-gray-500 mb-2">Pending</h3>
-            <p class="text-3xl font-bold text-orange-600">{{ pendingParcels }}</p>
+            <h3 class="text-xs lg:text-sm font-medium text-gray-500 mb-1 lg:mb-2">Pending</h3>
+            <p class="text-2xl lg:text-3xl font-bold text-orange-600">{{ pendingParcels }}</p>
           </div>
         </div>
 
-        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div class="bg-white p-4 lg:p-6 rounded-lg shadow-sm border border-gray-200">
           <div class="text-center">
-            <h3 class="text-sm font-medium text-gray-500 mb-2">In Transit</h3>
-            <p class="text-3xl font-bold text-blue-600">{{ inTransitParcels }}</p>
+            <h3 class="text-xs lg:text-sm font-medium text-gray-500 mb-1 lg:mb-2">In Transit</h3>
+            <p class="text-2xl lg:text-3xl font-bold text-blue-600">{{ inTransitParcels }}</p>
           </div>
         </div>
 
-        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div class="bg-white p-4 lg:p-6 rounded-lg shadow-sm border border-gray-200">
           <div class="text-center">
-            <h3 class="text-sm font-medium text-gray-500 mb-2">Delivered</h3>
-            <p class="text-3xl font-bold text-green-600">{{ deliveredParcels }}</p>
+            <h3 class="text-xs lg:text-sm font-medium text-gray-500 mb-1 lg:mb-2">Delivered</h3>
+            <p class="text-2xl lg:text-3xl font-bold text-green-600">{{ deliveredParcels }}</p>
           </div>
         </div>
       </div>
 
       <!-- Availability Toggle -->
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
-        <div class="flex items-center justify-between">
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6 mb-6 lg:mb-8">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h2 class="text-lg font-semibold text-gray-900">Availability Status</h2>
+            <h2 class="text-base lg:text-lg font-semibold text-gray-900">Availability Status</h2>
             <p class="text-sm text-gray-600">Toggle your availability for new parcel assignments</p>
           </div>
           <div class="flex items-center space-x-4">
             <span class="text-sm font-medium text-gray-700">
               {{ isAvailable ? 'Available' : 'Not Available' }}
             </span>
+            <!-- Mobile Toggle (Rectangular) -->
             <button
               (click)="updateAvailability()"
               [disabled]="updatingAvailability"
-              class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              class="lg:hidden relative inline-flex h-8 w-16 items-center rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              [class.bg-blue-600]="isAvailable"
+              [class.bg-gray-300]="!isAvailable">
+              <span
+                class="inline-block h-6 w-6 transform rounded-md bg-white transition-transform shadow-sm"
+                [class.translate-x-8]="isAvailable"
+                [class.translate-x-1]="!isAvailable">
+              </span>
+            </button>
+            <!-- Desktop Toggle (Circular) -->
+            <button
+              (click)="updateAvailability()"
+              [disabled]="updatingAvailability"
+              class="hidden lg:inline-flex relative h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               [class.bg-blue-600]="isAvailable"
               [class.bg-gray-200]="!isAvailable">
               <span
@@ -102,8 +139,80 @@
         </div>
       </div>
 
-      <!-- Assigned Parcels Table -->
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+      <!-- Mobile Card View -->
+      <div class="lg:hidden">
+        <div class="space-y-4">
+          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            <h2 class="text-base font-semibold text-gray-900 mb-4">Assigned Parcels</h2>
+            <p class="text-sm text-gray-600 mb-4">Manage your assigned parcels and update delivery status</p>
+            
+            <div class="space-y-4">
+              <div *ngFor="let parcel of assignedParcels" class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                <!-- Parcel Header -->
+                <div class="flex justify-between items-start mb-3">
+                  <div class="flex-1">
+                    <h3 class="font-medium text-gray-900 text-sm">{{ parcel.receiverName }}</h3>
+                    <p class="text-xs text-gray-500">{{ parcel.id }}</p>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <span class="px-2 py-1 text-xs font-medium rounded-full" [ngClass]="getStatusColor(parcel.status)">
+                      {{ parcel.status }}
+                    </span>
+                  </div>
+                </div>
+                
+                <!-- Parcel Details -->
+                <div class="space-y-2 text-sm">
+                  <div class="flex justify-between">
+                    <span class="text-gray-500">Weight:</span>
+                    <span class="text-gray-900">{{ parcel.weightCategory }}</span>
+                  </div>
+                  
+                  <!-- Addresses -->
+                  <div class="mt-3">
+                    <div class="text-gray-500 text-xs mb-1">From → To</div>
+                    <div class="text-xs text-gray-900">
+                      <div class="truncate">{{ parcel.pickupAddress }}</div>
+                      <div class="text-gray-400 text-center">↓</div>
+                      <div class="truncate">{{ parcel.destination }}</div>
+                    </div>
+                  </div>
+                  
+                  <!-- Status Update -->
+                  <div class="mt-3">
+                    <div class="text-gray-500 text-xs mb-1">Update Status</div>
+                    <select
+                      #statusSelect
+                      (change)="updateParcelStatus(parcel.id, statusSelect.value)"
+                      [value]="parcel.status"
+                      class="border border-gray-300 rounded px-2 py-1 text-xs w-full"
+                      [disabled]="getStatusOptions(parcel.status).length === 0">
+                      <option [value]="parcel.status">{{ parcel.status }}</option>
+                      <option *ngFor="let status of getStatusOptions(parcel.status)" [value]="status">
+                        {{ status }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Empty State for Mobile -->
+            <div *ngIf="assignedParcels.length === 0" class="text-center py-8">
+              <div class="text-gray-500">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                </svg>
+                <h3 class="mt-2 text-sm font-medium text-gray-900">No assigned parcels</h3>
+                <p class="mt-1 text-sm text-gray-500">You don't have any parcels assigned to you yet.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop Table View -->
+      <div class="hidden lg:block bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         <div class="px-6 py-4 border-b border-gray-200">
           <h2 class="text-lg font-semibold text-gray-900">Assigned Parcels</h2>
           <p class="text-sm text-gray-600">Manage your assigned parcels and update delivery status</p>
@@ -154,7 +263,7 @@
           </table>
         </div>
 
-        <!-- Empty State -->
+        <!-- Empty State for Desktop -->
         <div *ngIf="assignedParcels.length === 0" class="text-center py-12">
           <div class="text-gray-500">
             <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">

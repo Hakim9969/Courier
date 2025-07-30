@@ -2,22 +2,22 @@
 <div class="min-h-screen bg-gray-100">
   <app-navbar></app-navbar>
 
-  <main class="p-8">
+  <main class="p-4 lg:p-8">
     <!-- Welcome Text -->
-    <div class="mb-8">
-      <h1 class="text-2xl font-semibold text-gray-900 mb-2">
+    <div class="mb-6 lg:mb-8">
+      <h1 class="text-xl lg:text-2xl font-semibold text-gray-900 mb-2">
         Welcome {{ customerName }}.
       </h1>
     </div>
 
     <!-- Loading State -->
-    <div *ngIf="loading" class="flex justify-center items-center py-12">
-      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      <span class="ml-3 text-gray-600">Loading your parcels...</span>
+    <div *ngIf="loading" class="flex justify-center items-center py-8 lg:py-12">
+      <div class="animate-spin rounded-full h-8 w-8 lg:h-12 lg:w-12 border-b-2 border-blue-600"></div>
+      <span class="ml-3 text-sm lg:text-base text-gray-600">Loading your parcels...</span>
     </div>
 
     <!-- Error State -->
-    <div *ngIf="error && !loading" class="bg-red-50 border border-red-200 rounded-md p-4 mb-8">
+    <div *ngIf="error && !loading" class="bg-red-50 border border-red-200 rounded-md p-4 mb-6 lg:mb-8">
       <div class="flex">
         <div class="flex-shrink-0">
           <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
@@ -42,37 +42,35 @@
 
     <!-- Dashboard Content -->
     <ng-container *ngIf="!loading && !error">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6 lg:mb-8">
+        <div class="bg-white p-4 lg:p-6 rounded-lg shadow-sm border border-gray-200">
           <div class="text-center">
-            <h3 class="text-sm font-medium text-gray-500 mb-2">Total Parcels</h3>
-            <p class="text-3xl font-bold text-blue-600">{{ totalParcels }}</p>
+            <h3 class="text-xs lg:text-sm font-medium text-gray-500 mb-1 lg:mb-2">Total Parcels</h3>
+            <p class="text-2xl lg:text-3xl font-bold text-blue-600">{{ totalParcels }}</p>
           </div>
         </div>
 
-        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div class="bg-white p-4 lg:p-6 rounded-lg shadow-sm border border-gray-200">
           <div class="text-center">
-            <h3 class="text-sm font-medium text-gray-500 mb-2">Sent Parcels</h3>
-            <p class="text-3xl font-bold text-green-600">{{ sentParcels }}</p>
+            <h3 class="text-xs lg:text-sm font-medium text-gray-500 mb-1 lg:mb-2">Sent Parcels</h3>
+            <p class="text-2xl lg:text-3xl font-bold text-green-600">{{ sentParcels }}</p>
           </div>
         </div>
 
-        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div class="bg-white p-4 lg:p-6 rounded-lg shadow-sm border border-gray-200">
           <div class="text-center">
-            <h3 class="text-sm font-medium text-gray-500 mb-2">Received Parcels</h3>
-            <p class="text-3xl font-bold text-purple-600">{{ receivedParcels }}</p>
+            <h3 class="text-xs lg:text-sm font-medium text-gray-500 mb-1 lg:mb-2">Received Parcels</h3>
+            <p class="text-2xl lg:text-3xl font-bold text-purple-600">{{ receivedParcels }}</p>
           </div>
         </div>
 
-        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div class="bg-white p-4 lg:p-6 rounded-lg shadow-sm border border-gray-200">
           <div class="text-center">
-            <h3 class="text-sm font-medium text-gray-500 mb-2">Pending Parcels</h3>
-            <p class="text-3xl font-bold text-orange-600">{{ pendingParcels }}</p>
+            <h3 class="text-xs lg:text-sm font-medium text-gray-500 mb-1 lg:mb-2">Pending Parcels</h3>
+            <p class="text-2xl lg:text-3xl font-bold text-orange-600">{{ pendingParcels }}</p>
           </div>
         </div>
       </div>
-
-
 
       <!-- My Parcels Component -->
       <app-my-parcels></app-my-parcels>

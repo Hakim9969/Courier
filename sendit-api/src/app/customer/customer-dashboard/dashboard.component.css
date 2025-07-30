@@ -1,0 +1,171 @@
+/* Mobile Responsive Styles for Customer Dashboard */
+
+/* General mobile adjustments */
+@media (max-width: 768px) {
+  /* Ensure proper spacing on mobile */
+  .min-h-screen {
+    min-height: 100vh;
+  }
+  
+  /* Adjust main container padding for mobile */
+  main {
+    padding: 1rem;
+  }
+  
+  /* Make welcome text more readable on mobile */
+  h1 {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+  
+  /* Adjust loading spinner size for mobile */
+  .animate-spin {
+    min-width: 32px;
+    min-height: 32px;
+  }
+  
+  /* Make loading text more readable */
+  .text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+}
+
+/* Stats cards mobile responsiveness */
+@media (max-width: 1024px) {
+  /* Ensure stats cards are properly sized on tablets */
+  .grid.grid-cols-2 {
+    gap: 1rem;
+  }
+  
+  /* Adjust card padding for better mobile experience */
+  .bg-white {
+    padding: 1rem;
+  }
+  
+  /* Make card titles more readable on smaller screens */
+  .text-xs {
+    font-size: 0.75rem;
+    line-height: 1rem;
+  }
+  
+  /* Adjust number sizes for better mobile display */
+  .text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+}
+
+/* Very small screen adjustments */
+@media (max-width: 480px) {
+  /* Reduce padding further for very small screens */
+  main {
+    padding: 0.75rem;
+  }
+  
+  /* Make stats cards more compact */
+  .grid.grid-cols-2 {
+    gap: 0.75rem;
+  }
+  
+  /* Reduce card padding for very small screens */
+  .bg-white {
+    padding: 0.75rem;
+  }
+  
+  /* Make text even smaller for very small screens */
+  .text-xs {
+    font-size: 0.7rem;
+    line-height: 0.9rem;
+  }
+  
+  .text-2xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+  
+  /* Adjust margins for better spacing */
+  .mb-6 {
+    margin-bottom: 1rem;
+  }
+  
+  .mb-1 {
+    margin-bottom: 0.25rem;
+  }
+}
+
+/* Touch-friendly improvements */
+@media (max-width: 768px) {
+  /* Ensure buttons are touch-friendly */
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Make error state more touch-friendly */
+  .bg-red-50 {
+    padding: 1rem;
+  }
+  
+  /* Ensure proper spacing in error messages */
+  .flex {
+    gap: 0.75rem;
+  }
+}
+
+/* Landscape orientation adjustments */
+@media (max-width: 768px) and (orientation: landscape) {
+  /* Reduce vertical spacing in landscape mode */
+  .mb-6 {
+    margin-bottom: 0.75rem;
+  }
+  
+  .py-8 {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  
+  /* Make stats cards more compact in landscape */
+  .grid.grid-cols-2 {
+    gap: 0.5rem;
+  }
+  
+  .bg-white {
+    padding: 0.5rem;
+  }
+}
+
+/* High DPI screen adjustments */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Ensure crisp text rendering on high DPI screens */
+  .text-xs, .text-sm, .text-2xl, .text-3xl {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  /* Disable animations for users who prefer reduced motion */
+  .animate-spin {
+    animation: none;
+  }
+}
+
+/* Dark mode support (if needed in future) */
+@media (prefers-color-scheme: dark) {
+  /* Future dark mode styles can be added here */
+}
+
+/* Print styles */
+@media print {
+  /* Hide navigation and footer for print */
+  app-navbar, app-footer {
+    display: none;
+  }
+  
+  /* Ensure proper page breaks */
+  .grid {
+    page-break-inside: avoid;
+  }
+}

@@ -17,8 +17,31 @@
   cursor: not-allowed;
 }
 
-/* Responsive table adjustments */
+/* Mobile responsive styles */
 @media (max-width: 768px) {
+  /* Ensure form inputs are touch-friendly */
+  input, select {
+    min-height: 44px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  /* Adjust spacing for mobile */
+  .space-y-4 > * + * {
+    margin-top: 1rem;
+  }
+  
+  /* Make buttons more touch-friendly */
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Ensure cards are properly spaced */
+  .space-y-4 > * + * {
+    margin-top: 1rem;
+  }
+  
+  /* Responsive table adjustments */
   .table-container {
     overflow-x: auto;
   }
@@ -26,10 +49,195 @@
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+  
+  /* Mobile card styles */
+  .mobile-card {
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .mobile-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Availability toggle mobile adjustments */
+  .availability-toggle {
+    min-width: 44px;
+    min-height: 44px;
+  }
 }
 
 @media (max-width: 640px) {
+  /* Adjust padding for very small screens */
+  .p-4 {
+    padding: 0.75rem;
+  }
+  
+  /* Ensure text is readable */
+  .text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+  
+  /* Make sure cards don't overflow */
+  .bg-white {
+    border-radius: 0.5rem;
+  }
+  
   .stats-grid {
     grid-template-columns: 1fr;
+  }
+  
+  /* Single column layout for very small screens */
+  .grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Ensure dropdowns are properly contained */
+select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Prevent dropdown overflow */
+select option {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Mobile-specific status badge adjustments */
+@media (max-width: 768px) {
+  .status-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+/* Touch-friendly toggle switch */
+@media (max-width: 768px) {
+  .toggle-switch {
+    min-width: 44px;
+    min-height: 24px;
+  }
+  
+  .toggle-switch span {
+    min-width: 20px;
+    min-height: 20px;
+  }
+  
+  /* Mobile rectangular toggle specific styles */
+  .lg\:hidden.relative.inline-flex {
+    min-width: 64px; /* w-16 */
+    min-height: 32px; /* h-8 */
+  }
+  
+  .lg\:hidden.relative.inline-flex span {
+    min-width: 24px; /* w-6 */
+    min-height: 24px; /* h-6 */
+  }
+}
+
+/* Desktop circular toggle styles */
+@media (min-width: 1024px) {
+  .hidden.lg\:inline-flex {
+    min-width: 44px; /* w-11 */
+    min-height: 24px; /* h-6 */
+  }
+  
+  .hidden.lg\:inline-flex span {
+    min-width: 16px; /* w-4 */
+    min-height: 16px; /* h-4 */
+  }
+}
+
+/* Mobile card hover effects */
+@media (hover: hover) {
+  .mobile-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Loading state mobile adjustments */
+@media (max-width: 768px) {
+  .loading-spinner {
+    width: 2rem;
+    height: 2rem;
+  }
+  
+  .loading-text {
+    font-size: 0.875rem;
+  }
+}
+
+/* Error state mobile adjustments */
+@media (max-width: 768px) {
+  .error-container {
+    padding: 1rem;
+  }
+  
+  .error-button {
+    width: 100%;
+    margin-top: 0.75rem;
+  }
+}
+
+/* Success Alert Animation */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+/* Mobile responsive alerts */
+@media (max-width: 768px) {
+  /* Position alerts for mobile */
+  .fixed.top-4.right-4 {
+    top: 1rem;
+    right: 1rem;
+    left: 1rem;
+    max-width: none;
+  }
+  
+  /* Ensure alerts are readable on mobile */
+  .bg-green-50 {
+    padding: 1rem;
+  }
+  
+  /* Make close button more touch-friendly */
+  .inline-flex.text-green-400 button {
+    min-width: 32px;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Adjust alert positioning for very small screens */
+  .fixed.top-4.right-4 {
+    top: 0.5rem;
+    right: 0.5rem;
+    left: 0.5rem;
+  }
+  
+  /* Ensure text is readable */
+  .text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
   }
 } 

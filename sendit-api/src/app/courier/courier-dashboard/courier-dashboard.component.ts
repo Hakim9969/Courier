@@ -24,6 +24,10 @@ export class CourierDashboardComponent implements OnInit {
   error = '';
   isAvailable = true;
   updatingAvailability = false;
+  
+  // Success message properties
+  successMessage = '';
+  showSuccessAlert = false;
 
   constructor(
     private authService: AuthService,
@@ -116,6 +120,9 @@ export class CourierDashboardComponent implements OnInit {
           this.calculateStats();
         }
         
+        // Show success message
+        this.showSuccessMessage(`Parcel status updated to ${newStatus} successfully!`);
+        
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -154,5 +161,20 @@ export class CourierDashboardComponent implements OnInit {
       default:
         return ['PENDING', 'IN_TRANSIT', 'DELIVERED', 'CANCELLED'];
     }
+  }
+
+  // Success message methods
+  showSuccessMessage(message: string): void {
+    this.successMessage = message;
+    this.showSuccessAlert = true;
+    setTimeout(() => {
+      this.showSuccessAlert = false;
+      this.successMessage = '';
+    }, 4000);
+  }
+
+  closeSuccessAlert(): void {
+    this.showSuccessAlert = false;
+    this.successMessage = '';
   }
 } 

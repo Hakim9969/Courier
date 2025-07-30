@@ -44,6 +44,9 @@ export class CreateParcelComponent implements OnInit, AfterViewInit {
   
   // Error handling
   error = '';
+  successMessage = '';
+  showSuccessAlert = false;
+  showErrorAlert = false;
   
   // Google Places Autocomplete
   pickupAutocomplete: any;
@@ -388,7 +391,7 @@ export class CreateParcelComponent implements OnInit, AfterViewInit {
     
     if (!this.isFormValid()) {
       console.log('CreateParcelComponent - Form validation failed');
-      this.error = 'Please fill in all required fields';
+      this.showErrorMessage('Please fill in all required fields');
       return;
     }
 
@@ -414,16 +417,45 @@ export class CreateParcelComponent implements OnInit, AfterViewInit {
     this.parcelService.create(parcelPayload).subscribe({
       next: (response: Parcel) => {
         console.log('CreateParcelComponent - Parcel created successfully:', response);
-        alert('Parcel created successfully!');
+        this.showSuccessMessage('Parcel created successfully!');
         this.resetForm();
         this.isSubmitting = false;
       },
       error: (err: any) => {
         console.error('CreateParcelComponent - Error creating parcel:', err);
-        this.error = err.error?.message || 'Failed to create parcel. Please try again.';
+        this.showErrorMessage(err.error?.message || 'Failed to create parcel. Please try again.');
         this.isSubmitting = false;
       }
     });
+  }
+
+  // Alert methods
+  showSuccessMessage(message: string): void {
+    this.successMessage = message;
+    this.showSuccessAlert = true;
+    setTimeout(() => {
+      this.showSuccessAlert = false;
+      this.successMessage = '';
+    }, 4000);
+  }
+
+  showErrorMessage(message: string): void {
+    this.error = message;
+    this.showErrorAlert = true;
+    setTimeout(() => {
+      this.showErrorAlert = false;
+      this.error = '';
+    }, 5000);
+  }
+
+  closeSuccessAlert(): void {
+    this.showSuccessAlert = false;
+    this.successMessage = '';
+  }
+
+  closeErrorAlert(): void {
+    this.showErrorAlert = false;
+    this.error = '';
   }
 
   // Reset form

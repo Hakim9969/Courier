@@ -132,21 +132,14 @@ export class ManageParcelComponent implements OnInit {
   }
 
   updateStatus(id: string, newStatus: 'PENDING' | 'IN_TRANSIT' | 'DELIVERED' | 'CANCELLED'): void {
-    const updateData: UpdateParcelDto = { status: newStatus };
-    this.parcelService.update(id, updateData).subscribe({
-      next: (updatedParcel) => {
-        // Update the local parcel data instead of reloading everything
-        const parcelIndex = this.parcels.findIndex(p => p.id === id);
-        if (parcelIndex !== -1) {
-          this.parcels[parcelIndex] = { ...this.parcels[parcelIndex], ...updatedParcel };
-          this.filterParcels();
-        }
-      },
-      error: (err: any) => {
-        console.error('Update failed', err);
-        alert('Failed to update status. Please try again.');
-      }
-    });
+    const parcel = this.parcels.find(p => p.id === id);
+    if (parcel) {
+      parcel.status = newStatus;
+      this.filterParcels();
+      
+      // Show success message
+      this.showSuccessMessage(`Parcel status updated to ${newStatus} successfully!`);
+    }
   }
 
   // Method for template compatibility

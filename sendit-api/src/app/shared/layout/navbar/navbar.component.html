@@ -1,86 +1,192 @@
-<nav class="bg-white shadow px-6 py-4 flex justify-between items-center">
-  <a routerLink="/" class="text-2xl font-bold text-blue-600">SendIT</a>
+<nav class="bg-white shadow px-4 sm:px-6 py-4">
+  <div class="flex justify-between items-center">
+    <!-- Logo -->
+    <a routerLink="/" class="text-xl sm:text-2xl font-bold text-blue-600">SendIT</a>
 
-  <div class="flex items-center gap-4">
-    <!-- Navigation Links -->
-    <ng-container *ngIf="!isLoggedIn || currentUser?.role !== 'ADMIN'">
-      <a routerLink="/" 
-         [ngClass]="isActiveRoute('/') ? 'underline-nav-link' : ''"
-         class="font-medium transition-colors duration-200">Home</a>
-      <a routerLink="/about" 
-         [ngClass]="isActiveRoute('/about') ? 'underline-nav-link' : ''"
-         class="font-medium transition-colors duration-200">About Us</a>
-      <a *ngIf="isLoggedIn && currentUser?.role === 'CUSTOMER'"
-         routerLink="/track-order"
-         [ngClass]="isActiveRoute('/track-order') ? 'underline-nav-link' : ''"
-         class="font-medium transition-colors duration-200">Track Your Parcel</a>
-    </ng-container>
+    <!-- Desktop Navigation -->
+    <div class="hidden md:flex items-center gap-4">
+      <!-- Navigation Links -->
+      <ng-container *ngIf="!isLoggedIn || currentUser?.role !== 'ADMIN'">
+        <a routerLink="/" 
+           [ngClass]="isActiveRoute('/') ? 'underline-nav-link' : ''"
+           class="font-medium transition-colors duration-200">Home</a>
+        <a routerLink="/about" 
+           [ngClass]="isActiveRoute('/about') ? 'underline-nav-link' : ''"
+           class="font-medium transition-colors duration-200">About Us</a>
+        <a *ngIf="isLoggedIn && currentUser?.role === 'CUSTOMER'"
+           routerLink="/track-order"
+           [ngClass]="isActiveRoute('/track-order') ? 'underline-nav-link' : ''"
+           class="font-medium transition-colors duration-200">Track Your Parcel</a>
+      </ng-container>
 
-    <!-- Authentication Section -->
-    <div class="flex items-center gap-3">
-      <!-- Login/Register Buttons (when not logged in) -->
-      <div *ngIf="!isLoggedIn" class="inline-flex rounded-full shadow overflow-hidden">
-        <a (click)="openLogin()" 
-           class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 font-semibold hover:from-blue-600 hover:to-blue-700 transition-all duration-200 focus:z-10 cursor-pointer">
-          Login
-        </a>
-        <a (click)="openRegister()" 
-           class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-2 font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-200 border-l border-blue-400 focus:z-10 cursor-pointer">
-          Register
-        </a>
-      </div>
+      <!-- Authentication Section -->
+      <div class="flex items-center gap-3">
+        <!-- Login/Register Buttons (when not logged in) -->
+        <div *ngIf="!isLoggedIn" class="inline-flex rounded-full shadow overflow-hidden">
+          <a (click)="openLogin()" 
+             class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 font-semibold hover:from-blue-600 hover:to-blue-700 transition-all duration-200 focus:z-10 cursor-pointer">
+            Login
+          </a>
+          <a (click)="openRegister()" 
+             class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-2 font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-200 border-l border-blue-400 focus:z-10 cursor-pointer">
+            Register
+          </a>
+        </div>
 
-      <!-- Logged In User Section -->
-      <div *ngIf="isLoggedIn" class="flex items-center gap-3">
-        <!-- User Avatar with Dropdown -->
-        <div class="relative user-dropdown">
-          <!-- User Avatar Button -->
-          <button 
-            (click)="toggleDropdown($event)"
-            class="flex items-center justify-center w-10 h-10 bg-blue-600 text-white rounded-full font-semibold text-lg hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            [title]="currentUser?.email">
-            {{ getUserInitials() }}
-          </button>
-
-          <!-- Dropdown Menu -->
-          <div 
-            *ngIf="showDropdown"
-            class="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
-            
-            <!-- User Info Section -->
-            <div class="px-4 py-3 border-b border-gray-100">
-              <p class="text-sm font-medium text-gray-900">{{ currentUser?.name || 'User' }}</p>
-              <p class="text-sm text-gray-500 truncate">{{ currentUser?.email }}</p>
-            </div>
-
-            <!-- Dashboard Link -->
-            <a 
-              [routerLink]="getDashboardRoute()"
-              (click)="closeDropdown()"
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150 cursor-pointer">
-              <div class="flex items-center">
-                <svg class="w-4 h-4 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v6H8V5z"></path>
-                </svg>
-                {{ getDashboardLabel() }}
-              </div>
-            </a>
-
-            <!-- Logout Button -->
+        <!-- Logged In User Section -->
+        <div *ngIf="isLoggedIn" class="flex items-center gap-3">
+          <!-- User Avatar with Dropdown -->
+          <div class="relative user-dropdown">
+            <!-- User Avatar Button -->
             <button 
-              (click)="handleLogout()"
-              class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-150 cursor-pointer">
-              <div class="flex items-center">
-                <svg class="w-4 h-4 mr-3 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                </svg>
-                Logout
-              </div>
+              (click)="toggleDropdown($event)"
+              class="flex items-center justify-center w-10 h-10 bg-blue-600 text-white rounded-full font-semibold text-lg hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              [title]="currentUser?.email">
+              {{ getUserInitials() }}
             </button>
+
+            <!-- Dropdown Menu -->
+            <div 
+              *ngIf="showDropdown"
+              class="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
+              
+              <!-- User Info Section -->
+              <div class="px-4 py-3 border-b border-gray-100">
+                <p class="text-sm font-medium text-gray-900">{{ currentUser?.name || 'User' }}</p>
+                <p class="text-sm text-gray-500 truncate">{{ currentUser?.email }}</p>
+              </div>
+
+              <!-- Dashboard Link -->
+              <a 
+                [routerLink]="getDashboardRoute()"
+                (click)="closeDropdown()"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150 cursor-pointer">
+                <div class="flex items-center">
+                  <svg class="w-4 h-4 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v6H8V5z"></path>
+                  </svg>
+                  {{ getDashboardLabel() }}
+                </div>
+              </a>
+
+              <!-- Logout Button -->
+              <button 
+                (click)="handleLogout()"
+                class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-150 cursor-pointer">
+                <div class="flex items-center">
+                  <svg class="w-4 h-4 mr-3 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                  </svg>
+                  Logout
+                </div>
+              </button>
+            </div>
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <div class="md:hidden flex items-center gap-3">
+      <!-- Login/Register Buttons for Mobile (when not logged in) -->
+      <div *ngIf="!isLoggedIn" class="flex gap-2">
+        <button (click)="openLogin()" 
+                class="bg-blue-600 text-white px-3 py-2 rounded-md text-sm font-semibold hover:bg-blue-700 transition-colors duration-200">
+          Login
+        </button>
+        <button (click)="openRegister()" 
+                class="bg-blue-700 text-white px-3 py-2 rounded-md text-sm font-semibold hover:bg-blue-800 transition-colors duration-200">
+          Register
+        </button>
+      </div>
+
+      <!-- User Avatar for Mobile (when logged in) -->
+      <div *ngIf="isLoggedIn" class="relative user-dropdown">
+        <button 
+          (click)="toggleDropdown($event)"
+          class="flex items-center justify-center w-8 h-8 bg-blue-600 text-white rounded-full font-semibold text-sm hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          [title]="currentUser?.email">
+          {{ getUserInitials() }}
+        </button>
+
+        <!-- Mobile Dropdown Menu -->
+        <div 
+          *ngIf="showDropdown"
+          class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
+          
+          <!-- User Info Section -->
+          <div class="px-3 py-2 border-b border-gray-100">
+            <p class="text-sm font-medium text-gray-900">{{ currentUser?.name || 'User' }}</p>
+            <p class="text-xs text-gray-500 truncate">{{ currentUser?.email }}</p>
+          </div>
+
+          <!-- Dashboard Link -->
+          <a 
+            [routerLink]="getDashboardRoute()"
+            (click)="closeDropdown()"
+            class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150 cursor-pointer">
+            <div class="flex items-center">
+              <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v6H8V5z"></path>
+              </svg>
+              {{ getDashboardLabel() }}
+            </div>
+          </a>
+
+          <!-- Logout Button -->
+          <button 
+            (click)="handleLogout()"
+            class="block w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-150 cursor-pointer">
+            <div class="flex items-center">
+              <svg class="w-4 h-4 mr-2 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+              </svg>
+              Logout
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Hamburger Menu Button -->
+      <button 
+        (click)="toggleMobileMenu()"
+        class="text-gray-600 hover:text-gray-900 focus:outline-none focus:text-gray-900 transition-colors duration-200"
+        [class.text-blue-600]="showMobileMenu">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path *ngIf="!showMobileMenu" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          <path *ngIf="showMobileMenu" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Navigation Menu -->
+  <div *ngIf="showMobileMenu" class="md:hidden mt-4 pb-4 border-t border-gray-200">
+    <div class="flex flex-col space-y-3 pt-4">
+      <!-- Navigation Links -->
+      <ng-container *ngIf="!isLoggedIn || currentUser?.role !== 'ADMIN'">
+        <a routerLink="/" 
+           (click)="closeMobileMenu()"
+           [ngClass]="isActiveRoute('/') ? 'mobile-active-link' : 'mobile-nav-link'"
+           class="block py-2 px-4 rounded-md transition-colors duration-200">
+          Home
+        </a>
+        <a routerLink="/about" 
+           (click)="closeMobileMenu()"
+           [ngClass]="isActiveRoute('/about') ? 'mobile-active-link' : 'mobile-nav-link'"
+           class="block py-2 px-4 rounded-md transition-colors duration-200">
+          About Us
+        </a>
+        <a *ngIf="isLoggedIn && currentUser?.role === 'CUSTOMER'"
+           routerLink="/track-order"
+           (click)="closeMobileMenu()"
+           [ngClass]="isActiveRoute('/track-order') ? 'mobile-active-link' : 'mobile-nav-link'"
+           class="block py-2 px-4 rounded-md transition-colors duration-200">
+          Track Your Parcel
+        </a>
+      </ng-container>
     </div>
   </div>
 </nav>

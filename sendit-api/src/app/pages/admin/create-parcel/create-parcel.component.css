@@ -95,3 +95,124 @@ input:focus {
   border-color: #10b981;
   box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
 }
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .create-parcel-container {
+    margin: 0;
+    border-radius: 0;
+    min-height: 100vh;
+  }
+  
+  /* Ensure dropdowns don't overflow on mobile */
+  select {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* Adjust spacing for mobile */
+  .space-y-6 > * + * {
+    margin-top: 1rem;
+  }
+  
+  /* Make form elements more touch-friendly */
+  input, select {
+    min-height: 44px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  /* Ensure dropdown options are readable */
+  option {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+
+@media (max-width: 640px) {
+  .create-parcel-container {
+    padding: 1rem;
+  }
+  
+  /* Stack all form elements vertically on very small screens */
+  .grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Adjust spacing for very small screens */
+  .gap-4 {
+    gap: 0.75rem;
+  }
+}
+
+/* Ensure dropdowns are properly contained */
+select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Prevent dropdown overflow */
+select option {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Alert Animation */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+/* Mobile responsive alerts */
+@media (max-width: 768px) {
+  /* Position alerts for mobile */
+  .fixed.top-4.right-4 {
+    top: 1rem;
+    right: 1rem;
+    left: 1rem;
+    max-width: none;
+  }
+  
+  /* Ensure alerts are readable on mobile */
+  .bg-green-50, .bg-red-50 {
+    padding: 1rem;
+  }
+  
+  /* Make close button more touch-friendly */
+  .inline-flex.text-green-400 button,
+  .inline-flex.text-red-400 button {
+    min-width: 32px;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Adjust alert positioning for very small screens */
+  .fixed.top-4.right-4 {
+    top: 0.5rem;
+    right: 0.5rem;
+    left: 0.5rem;
+  }
+  
+  /* Ensure text is readable */
+  .text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+}

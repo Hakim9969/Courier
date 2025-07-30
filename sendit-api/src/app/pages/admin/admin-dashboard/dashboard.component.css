@@ -119,3 +119,63 @@
     padding: 0.7rem 0.2rem 0.7rem 0.2rem;
   }
 }
+
+/* Mobile responsive styles for admin dashboard */
+@media (max-width: 1024px) {
+  .parcel-details-section {
+    margin: 0 1rem;
+    padding: 1.5rem 1rem;
+  }
+  
+  .parcel-details-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .parcel-details-section {
+    margin: 0 0.5rem;
+    padding: 1rem 0.5rem;
+  }
+  
+  .parcel-details-grid {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+  }
+  
+  .parcel-detail-box {
+    padding: 0.6rem 0.8rem;
+    min-height: 2.5rem;
+  }
+  
+  .parcel-detail-label {
+    font-size: 0.85rem;
+  }
+  
+  .parcel-detail-value {
+    font-size: 1rem;
+  }
+}
+
+/* Mobile sidebar overlay */
+.mobile-sidebar-overlay {
+  backdrop-filter: blur(4px);
+}
+
+/* Mobile card styles */
+.mobile-parcel-card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.mobile-parcel-card:hover {
+  transform: translateY(-1px);
+}
+
+/* Responsive modal adjustments */
+@media (max-width: 640px) {
+  .modal-content {
+    margin: 1rem;
+    max-width: calc(100vw - 2rem);
+  }
+}

@@ -49,6 +49,9 @@ export class AdminDashboardComponent implements OnInit {
   showDeleteModal = false;
   parcelToDelete: Parcel | null = null;
   isDeleting = false;
+  
+  // Mobile sidebar
+  showMobileSidebar = false;
 
   activePage: string = 'dashboard';
 
@@ -152,6 +155,9 @@ export class AdminDashboardComponent implements OnInit {
         this.activePage = 'manage-couriers';
         break;
     }
+    
+    // Close mobile sidebar after navigation
+    this.closeMobileSidebar();
   }
 
   viewParcelDetails(parcel: Parcel) {
@@ -195,6 +201,9 @@ export class AdminDashboardComponent implements OnInit {
     if (idx !== -1) {
       this.parcels[idx] = { ...this.parcels[idx], status: newStatus as Parcel['status'] };
       this.calculateStats();
+      
+      // Show success message
+      this.showSuccessMessage(`Parcel status updated to ${newStatus} successfully!`);
     }
   }
 
@@ -291,5 +300,14 @@ export class AdminDashboardComponent implements OnInit {
         document.body.removeChild(errorDiv);
       }, 300);
     }, 3000);
+  }
+
+  // Mobile sidebar methods
+  toggleMobileSidebar() {
+    this.showMobileSidebar = !this.showMobileSidebar;
+  }
+
+  closeMobileSidebar() {
+    this.showMobileSidebar = false;
   }
 }

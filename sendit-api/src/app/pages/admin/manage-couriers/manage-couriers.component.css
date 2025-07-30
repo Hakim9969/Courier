@@ -50,4 +50,62 @@
 
 .animate-slide-in {
   animation: slideIn 0.3s ease-out forwards;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  /* Ensure form inputs are touch-friendly */
+  input, select, textarea {
+    min-height: 44px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  /* Adjust spacing for mobile */
+  .space-y-6 > * + * {
+    margin-top: 1rem;
+  }
+  
+  /* Make buttons more touch-friendly */
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Ensure cards are properly spaced */
+  .space-y-4 > * + * {
+    margin-top: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Adjust padding for very small screens */
+  .p-4 {
+    padding: 0.75rem;
+  }
+  
+  /* Ensure text is readable */
+  .text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+  
+  /* Make sure cards don't overflow */
+  .bg-white {
+    border-radius: 0.5rem;
+  }
+}
+
+/* Ensure dropdowns are properly contained */
+select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Prevent dropdown overflow */
+select option {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 } 

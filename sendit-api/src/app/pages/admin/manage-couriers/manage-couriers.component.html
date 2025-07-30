@@ -27,24 +27,24 @@
   </div>
 
   <!-- Header -->
-  <div class="flex justify-between items-center">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
     <div>
-      <h1 class="text-2xl font-semibold text-gray-900">Manage Couriers</h1>
+      <h1 class="text-xl lg:text-2xl font-semibold text-gray-900">Manage Couriers</h1>
       <p class="text-sm text-gray-600">Create, view, and manage courier accounts</p>
     </div>
     <button
       (click)="toggleCreateForm()"
-      class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200">
+      class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 w-full sm:w-auto">
       {{ showCreateForm ? 'Cancel' : 'Add New Courier' }}
     </button>
   </div>
 
   <!-- Create Courier Form -->
-  <div *ngIf="showCreateForm" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-    <h2 class="text-lg font-semibold text-gray-900 mb-4">Create New Courier</h2>
+  <div *ngIf="showCreateForm" class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6">
+    <h2 class="text-base lg:text-lg font-semibold text-gray-900 mb-4">Create New Courier</h2>
     
     <form (ngSubmit)="createCourier()" class="space-y-4">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div>
           <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
           <input
@@ -111,17 +111,17 @@
         {{ createError }}
       </div>
       
-      <div class="flex justify-end space-x-3">
+      <div class="flex flex-col sm:flex-row justify-end gap-3">
         <button
           type="button"
           (click)="toggleCreateForm()"
-          class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors duration-200">
+          class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors duration-200 w-full sm:w-auto">
           Cancel
         </button>
         <button
           type="submit"
           [disabled]="!isFormValid() || isSubmitting"
-          class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200">
+          class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 w-full sm:w-auto">
           <span *ngIf="isSubmitting">Creating...</span>
           <span *ngIf="!isSubmitting">Create Courier</span>
         </button>
@@ -131,7 +131,7 @@
 
   <!-- Search Bar -->
   <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-    <div class="flex items-center space-x-4">
+    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
       <div class="flex-1">
         <input
           type="text"
@@ -142,7 +142,7 @@
       </div>
       <button
         (click)="loadCouriers()"
-        class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors duration-200">
+        class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors duration-200 w-full sm:w-auto">
         Refresh
       </button>
     </div>
@@ -176,8 +176,81 @@
     </div>
   </div>
 
-  <!-- Couriers Table -->
-  <div *ngIf="!loading && !error" class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+  <!-- Mobile Card View -->
+  <div *ngIf="!loading && !error" class="lg:hidden">
+    <div class="space-y-4">
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <h2 class="text-base font-semibold text-gray-900 mb-4">Couriers ({{ filteredCouriers.length }})</h2>
+        
+        <div class="space-y-4">
+          <div *ngFor="let courier of filteredCouriers" class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+            <!-- Courier Header -->
+            <div class="flex justify-between items-start mb-3">
+              <div class="flex-1">
+                <h3 class="font-medium text-gray-900 text-sm">{{ courier.name }}</h3>
+                <p class="text-xs text-gray-500">{{ courier.id.substring(0, 8) }}...</p>
+              </div>
+              <div class="flex items-center space-x-2">
+                <button
+                  (click)="deleteCourier(courier.id)"
+                  class="text-red-500 hover:text-red-700 p-1 transition-colors duration-200">
+                  🗑️
+                </button>
+              </div>
+            </div>
+            
+            <!-- Courier Details -->
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span class="text-gray-500">Email:</span>
+                <span class="text-gray-900 truncate max-w-32">{{ courier.email }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-500">Phone:</span>
+                <span class="text-gray-900">{{ courier.phone }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-500">Created:</span>
+                <span class="text-gray-900">{{ courier.createdAt | date:'MMM dd' }}</span>
+              </div>
+              
+              <!-- Role and Status -->
+              <div class="mt-3 space-y-2">
+                <div class="flex justify-between items-center">
+                  <span class="text-gray-500 text-xs">Role:</span>
+                  <span class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+                    {{ courier.role }}
+                  </span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-gray-500 text-xs">Status:</span>
+                  <span class="px-2 py-1 text-xs font-medium rounded-full" [ngClass]="getStatusColor(courier.isAvailable)">
+                    {{ courier.isAvailable ? 'Available' : 'Not Available' }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Empty State for Mobile -->
+        <div *ngIf="filteredCouriers.length === 0" class="text-center py-8">
+          <div class="text-gray-500">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            <h3 class="mt-2 text-sm font-medium text-gray-900">No couriers found</h3>
+            <p class="mt-1 text-sm text-gray-500">
+              {{ searchText ? 'No couriers match your search criteria.' : 'Get started by creating a new courier.' }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Desktop Table View -->
+  <div *ngIf="!loading && !error" class="hidden lg:block bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
     <div class="px-6 py-4 border-b border-gray-200">
       <h2 class="text-lg font-semibold text-gray-900">Couriers ({{ filteredCouriers.length }})</h2>
     </div>
@@ -227,7 +300,7 @@
       </table>
     </div>
 
-    <!-- Empty State -->
+    <!-- Empty State for Desktop -->
     <div *ngIf="filteredCouriers.length === 0" class="text-center py-12">
       <div class="text-gray-500">
         <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">

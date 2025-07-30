@@ -3,23 +3,56 @@
   <app-navbar></app-navbar>
 
   <!-- Main Content -->
-  <div class="flex">
+  <div class="flex flex-col lg:flex-row">
+    <!-- Mobile Menu Toggle -->
+    <div class="lg:hidden bg-white border-b border-gray-200 px-4 py-3">
+      <button 
+        (click)="toggleMobileSidebar()"
+        class="flex items-center gap-2 text-gray-700 hover:text-gray-900 focus:outline-none focus:text-gray-900 transition-colors duration-200">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+        <span class="font-medium">Menu</span>
+      </button>
+    </div>
+
     <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-sm min-h-screen border-r border-gray-200">
+    <aside 
+      [class]="showMobileSidebar ? 'translate-x-0' : '-translate-x-full'"
+      class="fixed lg:relative inset-y-0 left-0 z-40 w-64 bg-white shadow-sm lg:shadow-none border-r border-gray-200 transform lg:translate-x-0 transition-transform duration-300 ease-in-out lg:transition-none">
+      <!-- Mobile Sidebar Header -->
+      <div class="lg:hidden flex items-center justify-between p-4 border-b border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-900">Admin Dashboard</h2>
+        <button 
+          (click)="toggleMobileSidebar()"
+          class="text-gray-500 hover:text-gray-700 focus:outline-none">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      
       <nav class="p-4 space-y-2">
         <button
           *ngFor="let item of sidebarItems"
           (click)="onSidebarItemClick(item)"
           [class]="item.active ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-100'"
-          class="w-full text-left px-4 py-2 rounded transition-colors duration-200 flex items-center gap-2">
+          class="w-full text-left px-4 py-3 rounded transition-colors duration-200 flex items-center gap-3 text-sm lg:text-base">
           <span class="sidebar-icon text-lg">{{ item.icon }}</span>
           <span>{{ item.label }}</span>
         </button>
       </nav>
     </aside>
 
+    <!-- Mobile Sidebar Overlay -->
+    <div 
+      *ngIf="showMobileSidebar" 
+      (click)="toggleMobileSidebar()"
+      class="fixed inset-0 bg-gray-600 bg-opacity-50 z-30 lg:hidden">
+    </div>
+
     <!-- Dynamic Content -->
-    <main class="flex-1 p-8">
+    <main class="flex-1 p-4 lg:p-8 min-h-screen">
 
       <!-- Dashboard View -->
       <ng-container *ngIf="activePage === 'dashboard'">
@@ -57,73 +90,89 @@
 
         <!-- Dashboard Content -->
         <ng-container *ngIf="!loading && !error">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6 lg:mb-8">
+            <div class="bg-white p-4 lg:p-6 rounded-lg shadow-sm border border-gray-200">
               <div class="text-center">
-                <h3 class="text-sm font-medium text-gray-500 mb-2">Total Parcels</h3>
-                <p class="text-3xl font-bold text-blue-600">{{ totalParcels }}</p>
+                <h3 class="text-xs lg:text-sm font-medium text-gray-500 mb-1 lg:mb-2">Total Parcels</h3>
+                <p class="text-2xl lg:text-3xl font-bold text-blue-600">{{ totalParcels }}</p>
               </div>
             </div>
 
-            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <div class="bg-white p-4 lg:p-6 rounded-lg shadow-sm border border-gray-200">
               <div class="text-center">
-                <h3 class="text-sm font-medium text-gray-500 mb-2">Delivered Parcels</h3>
-                <p class="text-3xl font-bold text-blue-600">{{ deliveredParcels }}</p>
+                <h3 class="text-xs lg:text-sm font-medium text-gray-500 mb-1 lg:mb-2">Delivered Parcels</h3>
+                <p class="text-2xl lg:text-3xl font-bold text-blue-600">{{ deliveredParcels }}</p>
               </div>
             </div>
 
-            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <div class="bg-white p-4 lg:p-6 rounded-lg shadow-sm border border-gray-200">
               <div class="text-center">
-                <h3 class="text-sm font-medium text-gray-500 mb-2">Pending Parcels</h3>
-                <p class="text-3xl font-bold text-blue-600">{{ pendingParcels }}</p>
+                <h3 class="text-xs lg:text-sm font-medium text-gray-500 mb-1 lg:mb-2">Pending Parcels</h3>
+                <p class="text-2xl lg:text-3xl font-bold text-blue-600">{{ pendingParcels }}</p>
               </div>
             </div>
 
-            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <div class="bg-white p-4 lg:p-6 rounded-lg shadow-sm border border-gray-200">
               <div class="text-center">
-                <h3 class="text-sm font-medium text-gray-500 mb-2">Total Users</h3>
-                <p class="text-3xl font-bold text-blue-600">{{ totalUsers }}</p>
+                <h3 class="text-xs lg:text-sm font-medium text-gray-500 mb-1 lg:mb-2">Total Users</h3>
+                <p class="text-2xl lg:text-3xl font-bold text-blue-600">{{ totalUsers }}</p>
               </div>
             </div>
           </div>
 
           <!-- Pending Parcels Table -->
-          <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-x-auto mb-8">
-            <h2 class="text-xl font-semibold text-gray-900 px-6 pt-6 pb-2">Pending Parcels</h2>
+          <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mb-6 lg:mb-8">
+            <h2 class="text-lg lg:text-xl font-semibold text-gray-900 px-4 lg:px-6 pt-4 lg:pt-6 pb-2">Pending Parcels</h2>
             <!-- Search Bar -->
-            <div class="flex flex-wrap gap-4 items-center mb-6 px-6">
+            <div class="flex flex-wrap gap-4 items-center mb-4 lg:mb-6 px-4 lg:px-6">
               <input
                 type="text"
                 [(ngModel)]="searchText"
                 (ngModelChange)="filterPendingParcels()"
-                placeholder="Search by receiver name, pickup address, or destination..."
-                class="border border-gray-300 rounded px-3 py-2 text-sm w-64"
+                placeholder="Search parcels..."
+                class="border border-gray-300 rounded px-3 py-2 text-sm w-full lg:w-64"
               />
             </div>
-            <table class="w-full">
-              <thead class="bg-gray-50 border-b border-gray-200">
-                <tr>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Receiver</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pickup Address</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Destination</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Weight</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                </tr>
-              </thead>
-              <tbody class="bg-white divide-y divide-gray-200">
-                <ng-container *ngFor="let parcel of filteredPendingParcels">
-                  <!-- Main Row -->
-                  <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4 text-sm text-blue-600 font-medium">{{ parcel.id }}</td>
-                    <td class="px-6 py-4 text-sm">{{ parcel.receiverName }}</td>
-                    <td class="px-6 py-4 text-sm">{{ parcel.pickupAddress }}</td>
-                    <td class="px-6 py-4 text-sm">{{ parcel.destination }}</td>
-                    <td class="px-6 py-4 text-sm">{{ parcel.weightCategory }}</td>
-                    <td class="px-6 py-4">
+            
+            <!-- Mobile Card View -->
+            <div class="lg:hidden">
+              <div class="space-y-4 p-4">
+                <div *ngFor="let parcel of filteredPendingParcels" class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                  <div class="flex justify-between items-start mb-3">
+                    <div class="flex-1">
+                      <h3 class="font-medium text-gray-900 text-sm">{{ parcel.receiverName }}</h3>
+                      <p class="text-xs text-blue-600 font-medium">{{ parcel.id.substring(0, 8) }}...</p>
+                    </div>
+                    <div class="flex gap-2">
+                      <button 
+                        (click)="viewParcelDetails(parcel)"
+                        class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs transition-colors duration-200">
+                        View
+                      </button>
+                      <button 
+                        (click)="deleteParcel(parcel.id)"
+                        class="text-red-500 hover:text-red-700 p-1 transition-colors duration-200">
+                        🗑️
+                      </button>
+                    </div>
+                  </div>
+                  <div class="space-y-2 text-xs">
+                    <div class="flex justify-between">
+                      <span class="text-gray-500">From:</span>
+                      <span class="text-gray-900 truncate ml-2">{{ parcel.pickupAddress }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-gray-500">To:</span>
+                      <span class="text-gray-900 truncate ml-2">{{ parcel.destination }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-gray-500">Weight:</span>
+                      <span class="text-gray-900">{{ parcel.weightCategory }}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                      <span class="text-gray-500">Status:</span>
                       <select
-                        class="text-sm rounded px-2 py-1 border border-gray-300"
+                        class="text-xs rounded px-2 py-1 border border-gray-300"
                         [ngClass]="getStatusClasses(parcel.status)"
                         [ngModel]="parcel.status"
                         (ngModelChange)="updateParcelStatus(parcel.id, $event)"
@@ -133,26 +182,71 @@
                         <option value="DELIVERED">Delivered</option>
                         <option value="CANCELLED">Cancelled</option>
                       </select>
-                    </td>
-                    <td class="px-6 py-4 text-sm font-medium space-x-1">
-                      <button 
-                        (click)="viewParcelDetails(parcel)"
-                        class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs transition-colors duration-200">
-                        View
-                      </button>
-                      <button 
-                        (click)="deleteParcel(parcel.id)"
-                        class="text-red-500 hover:text-red-700 p-1 transition-colors duration-200">
-                        🗑️
-                      </button>
-                    </td>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="filteredPendingParcels.length === 0" class="text-center text-gray-400 py-8">
+                  No pending parcels found.
+                </div>
+              </div>
+            </div>
+
+            <!-- Desktop Table View -->
+            <div class="hidden lg:block overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-200">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Receiver</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pickup Address</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Destination</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Weight</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                   </tr>
-                </ng-container>
-                <tr *ngIf="filteredPendingParcels.length === 0">
-                  <td colspan="7" class="px-6 py-4 text-center text-gray-400">No pending parcels found.</td>
-                </tr>
-              </tbody>
-            </table>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <ng-container *ngFor="let parcel of filteredPendingParcels">
+                    <!-- Main Row -->
+                    <tr class="hover:bg-gray-50">
+                      <td class="px-6 py-4 text-sm text-blue-600 font-medium">{{ parcel.id }}</td>
+                      <td class="px-6 py-4 text-sm">{{ parcel.receiverName }}</td>
+                      <td class="px-6 py-4 text-sm">{{ parcel.pickupAddress }}</td>
+                      <td class="px-6 py-4 text-sm">{{ parcel.destination }}</td>
+                      <td class="px-6 py-4 text-sm">{{ parcel.weightCategory }}</td>
+                      <td class="px-6 py-4">
+                        <select
+                          class="text-sm rounded px-2 py-1 border border-gray-300"
+                          [ngClass]="getStatusClasses(parcel.status)"
+                          [ngModel]="parcel.status"
+                          (ngModelChange)="updateParcelStatus(parcel.id, $event)"
+                        >
+                          <option value="PENDING">Pending</option>
+                          <option value="IN_TRANSIT">In Transit</option>
+                          <option value="DELIVERED">Delivered</option>
+                          <option value="CANCELLED">Cancelled</option>
+                        </select>
+                      </td>
+                      <td class="px-6 py-4 text-sm font-medium space-x-1">
+                        <button 
+                          (click)="viewParcelDetails(parcel)"
+                          class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs transition-colors duration-200">
+                          View
+                        </button>
+                        <button 
+                          (click)="deleteParcel(parcel.id)"
+                          class="text-red-500 hover:text-red-700 p-1 transition-colors duration-200">
+                          🗑️
+                        </button>
+                      </td>
+                    </tr>
+                  </ng-container>
+                  <tr *ngIf="filteredPendingParcels.length === 0">
+                    <td colspan="7" class="px-6 py-4 text-center text-gray-400">No pending parcels found.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </ng-container>
       </ng-container>

@@ -55,6 +55,68 @@ export class MailerService {
     }
   }
 
+  async sendParcelCreationEmail(
+    to: string, 
+    recipientName: string, 
+    parcelId: string, 
+    senderName: string, 
+    receiverName: string,
+    pickupAddress: string,
+    destination: string,
+    weightCategory: string
+  ): Promise<void> {
+    try {
+      await this.mailerService.sendMail({
+        to,
+        subject: 'New Parcel Created - SendIT',
+        template: 'parcel-created',
+        context: {
+          recipientName,
+          parcelId,
+          senderName,
+          receiverName,
+          pickupAddress,
+          destination,
+          weightCategory,
+        },
+      });
+      this.logger.log(`Parcel creation email sent to ${to}`);
+    } catch (error) {
+      this.logger.error(`Failed to send parcel creation email to ${to}:`, error);
+      throw new Error(`Failed to send parcel creation email: ${error.message}`);
+    }
+  }
+
+  async sendCourierParcelAssignmentEmail(
+    to: string,
+    courierName: string,
+    parcelId: string,
+    senderName: string,
+    receiverName: string,
+    pickupAddress: string,
+    destination: string
+  ): Promise<void> {
+    try {
+      await this.mailerService.sendMail({
+        to,
+        subject: 'New Parcel Assignment - SendIT',
+        template: 'courier-parcel-assignment',
+        context: {
+          courierName,
+          parcelId,
+          senderName,
+          receiverName,
+          pickupAddress,
+          destination,
+        },
+      });
+      this.logger.log(`Courier parcel assignment email sent to ${to}`);
+    } catch (error) {
+      this.logger.error(`Failed to send courier parcel assignment email to ${to}:`, error);
+      throw new Error(`Failed to send courier parcel assignment email: ${error.message}`);
+    }
+  }
+
   async testEmailConnection(): Promise<boolean> {
     try {
       await this.mailerService.sendMail({

@@ -30,6 +30,15 @@ export class ManageCouriersComponent implements OnInit {
   // Search and filter
   searchText = '';
   filteredCouriers: Courier[] = [];
+  
+  // Success alert
+  showSuccessAlert = false;
+  successMessage = '';
+  
+  // Delete confirmation modal
+  showDeleteModal = false;
+  courierToDelete: Courier | null = null;
+  isDeleting = false;
 
   constructor(private courierService: CourierService) {}
 
@@ -117,10 +126,11 @@ export class ManageCouriersComponent implements OnInit {
     this.courierService.create(courierData).subscribe({
       next: (response: Courier) => {
         console.log('Courier created successfully:', response);
-        alert('Courier created successfully!');
+        this.showSuccessMessage('Courier created successfully!');
         this.showCreateForm = false;
         this.resetCreateForm();
         this.loadCouriers(); // Reload the list
+        this.isSubmitting = false;
       },
       error: (err: any) => {
         console.error('Error creating courier:', err);
@@ -148,21 +158,74 @@ export class ManageCouriersComponent implements OnInit {
   }
 
   deleteCourier(courierId: string) {
-    if (confirm('Are you sure you want to delete this courier?')) {
-      this.courierService.delete(courierId).subscribe({
-        next: () => {
-          alert('Courier deleted successfully!');
-          this.loadCouriers(); // Reload the list
-        },
-        error: (err: any) => {
-          console.error('Error deleting courier:', err);
-          alert('Failed to delete courier');
-        }
-      });
+    const courier = this.couriers.find(c => c.id === courierId);
+    if (courier) {
+      this.courierToDelete = courier;
+      this.showDeleteModal = true;
     }
+  }
+
+  confirmDelete(): void {
+    if (!this.courierToDelete) return;
+    
+    this.isDeleting = true;
+    this.courierService.delete(this.courierToDelete.id).subscribe({
+      next: () => {
+        this.loadCouriers();
+        this.closeDeleteModal();
+        this.showSuccessMessage('Courier deleted successfully!');
+      },
+      error: err => {
+        this.closeDeleteModal();
+        this.showErrorMessage(err.error?.message || 'Failed to delete courier');
+      }
+    });
+  }
+
+  closeDeleteModal(): void {
+    this.showDeleteModal = false;
+    this.courierToDelete = null;
+    this.isDeleting = false;
+  }
+
+  showErrorMessage(message: string): void {
+    // Create a temporary error message element
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform transition-all duration-300 ease-in-out';
+    errorDiv.textContent = message;
+    document.body.appendChild(errorDiv);
+
+    // Animate in
+    setTimeout(() => {
+      errorDiv.style.transform = 'translateX(0)';
+    }, 100);
+
+    // Remove after 3 seconds
+    setTimeout(() => {
+      errorDiv.style.transform = 'translateX(100%)';
+      setTimeout(() => {
+        document.body.removeChild(errorDiv);
+      }, 300);
+    }, 3000);
   }
 
   getStatusColor(isAvailable: boolean): string {
     return isAvailable ? 'text-green-600 bg-green-100' : 'text-red-600 bg-red-100';
+  }
+
+  showSuccessMessage(message: string): void {
+    this.successMessage = message;
+    this.showSuccessAlert = true;
+    
+    // Auto-hide after 4 seconds
+    setTimeout(() => {
+      this.showSuccessAlert = false;
+      this.successMessage = '';
+    }, 4000);
+  }
+
+  closeSuccessAlert(): void {
+    this.showSuccessAlert = false;
+    this.successMessage = '';
   }
 } 

@@ -25,4 +25,48 @@ export class MailerController {
     const result = await this.mailerService.testEmailConnection();
     return { status: result ? 'OK' : 'FAIL' };
   }
+
+  @Post('test-parcel-created')
+  async testParcelCreatedEmail(@Body() body: { 
+    email: string; 
+    recipientName: string; 
+    parcelId: string; 
+    senderName: string; 
+    receiverName: string;
+    pickupAddress: string;
+    destination: string;
+    weightCategory: string;
+  }) {
+    return this.mailerService.sendParcelCreationEmail(
+      body.email,
+      body.recipientName,
+      body.parcelId,
+      body.senderName,
+      body.receiverName,
+      body.pickupAddress,
+      body.destination,
+      body.weightCategory
+    );
+  }
+
+  @Post('test-courier-assignment')
+  async testCourierAssignmentEmail(@Body() body: { 
+    email: string; 
+    courierName: string; 
+    parcelId: string; 
+    senderName: string; 
+    receiverName: string;
+    pickupAddress: string;
+    destination: string;
+  }) {
+    return this.mailerService.sendCourierParcelAssignmentEmail(
+      body.email,
+      body.courierName,
+      body.parcelId,
+      body.senderName,
+      body.receiverName,
+      body.pickupAddress,
+      body.destination
+    );
+  }
 }

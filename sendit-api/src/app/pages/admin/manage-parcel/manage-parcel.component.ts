@@ -24,6 +24,11 @@ export class ManageParcelComponent implements OnInit {
   availableCouriers: Courier[] = [];
   receiverSuggestions: User[] = [];
   showReceiverSuggestions = false;
+  
+  // Delete confirmation modal
+  showDeleteModal = false;
+  parcelToDelete: Parcel | null = null;
+  isDeleting = false;
   statusOptions = [
     { value: 'PENDING', label: 'Pending' },
     { value: 'IN_TRANSIT', label: 'In Transit' },
@@ -150,21 +155,80 @@ export class ManageParcelComponent implements OnInit {
   }
 
   deleteParcel(id: string) {
-    if (!confirm('Are you sure you want to delete this parcel?')) return;
+    const parcel = this.parcels.find(p => p.id === id);
+    if (parcel) {
+      this.parcelToDelete = parcel;
+      this.showDeleteModal = true;
+    }
+  }
 
-    this.parcelService.delete(id).subscribe({
+  confirmDelete() {
+    if (!this.parcelToDelete) return;
+    
+    this.isDeleting = true;
+    this.parcelService.delete(this.parcelToDelete.id).subscribe({
       next: (response) => {
         this.selectedParcel = null;
         // Remove from local arrays instead of reloading
-        this.parcels = this.parcels.filter(p => p.id !== id);
+        this.parcels = this.parcels.filter(p => p.id !== this.parcelToDelete!.id);
         this.filterParcels();
-        alert('Parcel deleted successfully!');
+        this.closeDeleteModal();
+        this.showSuccessMessage('Parcel deleted successfully!');
       },
       error: (err: any) => {
         console.error('Delete failed', err);
-        alert('Failed to delete parcel. Please try again.');
+        this.closeDeleteModal();
+        this.showErrorMessage('Failed to delete parcel. Please try again.');
       }
     });
+  }
+
+  closeDeleteModal() {
+    this.showDeleteModal = false;
+    this.parcelToDelete = null;
+    this.isDeleting = false;
+  }
+
+  showSuccessMessage(message: string) {
+    // Create a temporary success message element
+    const successDiv = document.createElement('div');
+    successDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform transition-all duration-300 ease-in-out';
+    successDiv.textContent = message;
+    document.body.appendChild(successDiv);
+
+    // Animate in
+    setTimeout(() => {
+      successDiv.style.transform = 'translateX(0)';
+    }, 100);
+
+    // Remove after 3 seconds
+    setTimeout(() => {
+      successDiv.style.transform = 'translateX(100%)';
+      setTimeout(() => {
+        document.body.removeChild(successDiv);
+      }, 300);
+    }, 3000);
+  }
+
+  showErrorMessage(message: string) {
+    // Create a temporary error message element
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform transition-all duration-300 ease-in-out';
+    errorDiv.textContent = message;
+    document.body.appendChild(errorDiv);
+
+    // Animate in
+    setTimeout(() => {
+      errorDiv.style.transform = 'translateX(0)';
+    }, 100);
+
+    // Remove after 3 seconds
+    setTimeout(() => {
+      errorDiv.style.transform = 'translateX(100%)';
+      setTimeout(() => {
+        document.body.removeChild(errorDiv);
+      }, 300);
+    }, 3000);
   }
 
   toggleDetails(parcel: Parcel) {
@@ -209,7 +273,7 @@ export class ManageParcelComponent implements OnInit {
 
     this.parcelService.update(parcel.id, updateData).subscribe({
       next: (updatedParcel) => {
-        alert('Parcel updated successfully!');
+        this.showSuccessMessage('Parcel updated successfully!');
         // Update local data instead of reloading
         const parcelIndex = this.parcels.findIndex(p => p.id === parcel.id);
         if (parcelIndex !== -1) {
@@ -220,7 +284,7 @@ export class ManageParcelComponent implements OnInit {
       },
       error: (err: any) => {
         console.error('Failed to update parcel', err);
-        alert(err?.error?.message || 'Failed to update parcel.');
+        this.showErrorMessage(err?.error?.message || 'Failed to update parcel.');
       }
     });
   }

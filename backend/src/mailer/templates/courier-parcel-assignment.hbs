@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Parcel Assignment - SendIT</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 30px auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .header {
+      background-color: #059669;
+      color: white;
+      padding: 25px;
+      text-align: center;
+      border-radius: 8px 8px 0 0;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .content {
+      padding: 25px;
+      background-color: #f9f9f9;
+    }
+    .content h2 {
+      margin-top: 0;
+      color: #059669;
+    }
+    .parcel-details {
+      background-color: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .detail-row:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+    .detail-label {
+      font-weight: 600;
+      color: #374151;
+    }
+    .detail-value {
+      color: #6b7280;
+    }
+    .parcel-id {
+      background-color: #d1fae5;
+      color: #065f46;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-weight: 600;
+    }
+    .footer {
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+      color: #777;
+      background-color: #f9f9f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .cta-button {
+      display: inline-block;
+      background-color: #059669;
+      color: white;
+      padding: 12px 24px;
+      text-decoration: none;
+      border-radius: 6px;
+      margin-top: 20px;
+      font-weight: 600;
+    }
+    .cta-button:hover {
+      background-color: #047857;
+    }
+    .urgent-notice {
+      background-color: #fef3c7;
+      border: 1px solid #f59e0b;
+      border-radius: 6px;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .urgent-notice h3 {
+      margin-top: 0;
+      color: #d97706;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🚚 New Parcel Assignment!</h1>
+    </div>
+    <div class="content">
+      <h2>Hello {{courierName}}!</h2>
+      <p>You have been assigned a new parcel for delivery. Please review the details below:</p>
+      
+      <div class="urgent-notice">
+        <h3>⚠️ Action Required</h3>
+        <p>Please confirm this assignment and begin pickup process as soon as possible.</p>
+      </div>
+      
+      <div class="parcel-details">
+        <div class="detail-row">
+          <span class="detail-label">Parcel ID:</span>
+          <span class="parcel-id">{{parcelId}}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Sender:</span>
+          <span class="detail-value">{{senderName}}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Receiver:</span>
+          <span class="detail-value">{{receiverName}}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Pickup Address:</span>
+          <span class="detail-value">{{pickupAddress}}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Destination:</span>
+          <span class="detail-value">{{destination}}</span>
+        </div>
+      </div>
+
+      <p><strong>Next Steps:</strong></p>
+      <ul>
+        <li>Contact the sender to arrange pickup</li>
+        <li>Update parcel status to "In Transit" when pickup is complete</li>
+        <li>Deliver to the specified destination</li>
+        <li>Mark parcel as "Delivered" upon completion</li>
+      </ul>
+      
+      <div style="text-align: center;">
+        <a href="#" class="cta-button">View Parcel Details</a>
+      </div>
+      
+      <p style="margin-top: 20px; font-size: 14px; color: #6b7280;">
+        If you have any issues with this assignment, please contact the admin team immediately.
+      </p>
+    </div>
+    <div class="footer">
+      &copy; 2025 SendIT Courier Services. All rights reserved.
+    </div>
+  </div>
+</body>
+</html> 

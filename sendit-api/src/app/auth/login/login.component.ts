@@ -32,7 +32,7 @@ export class LoginComponent {
         const role = this.getRoleFromToken();
         console.log('Login successful, role:', role);
         const redirectPath = role === 'ADMIN' ? '/admin/dashboard' :
-                           role === 'CUSTOMER' ? '/dashboard' :
+                           role === 'CUSTOMER' ? '/home' :
                            role === 'COURIER' ? '/courier/dashboard' : '/';
         console.log('Redirecting to:', redirectPath);
         

@@ -49,6 +49,21 @@ export class CreateParcelComponent implements OnInit, AfterViewInit {
   pickupAutocomplete: any;
   destinationAutocomplete: any;
   
+  // User search autocomplete
+  filteredSenders: User[] = [];
+  filteredReceivers: User[] = [];
+  filteredCouriers: Courier[] = [];
+  
+  // Search terms
+  senderSearchTerm = '';
+  receiverSearchTerm = '';
+  courierSearchTerm = '';
+  
+  // Show/hide dropdowns
+  showSenderDropdown = false;
+  showReceiverDropdown = false;
+  showCourierDropdown = false;
+  
   // Weight categories matching backend enum
   weightCategories = [
     { value: 'LIGHT', label: 'Light (0-1 kg)' },
@@ -219,7 +234,126 @@ export class CreateParcelComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // Courier selection from dropdown
+  // Sender search and selection
+  onSenderSearch(event: Event): void {
+    const searchTerm = (event.target as HTMLInputElement).value.toLowerCase();
+    this.senderSearchTerm = searchTerm;
+    
+    if (searchTerm.trim() === '') {
+      this.filteredSenders = [];
+      this.showSenderDropdown = false;
+      return;
+    }
+    
+    this.filteredSenders = this.customers.filter(customer => 
+      customer.name.toLowerCase().includes(searchTerm) ||
+      customer.email.toLowerCase().includes(searchTerm)
+    );
+    this.showSenderDropdown = this.filteredSenders.length > 0;
+  }
+
+  onSenderSelect(sender: User): void {
+    this.selectedSender = sender;
+    this.parcel.senderId = sender.id;
+    this.senderSearchTerm = sender.name;
+    this.showSenderDropdown = false;
+    this.filteredSenders = [];
+  }
+
+  onSenderInputFocus(): void {
+    if (this.senderSearchTerm.trim() !== '') {
+      this.showSenderDropdown = this.filteredSenders.length > 0;
+    }
+  }
+
+  onSenderInputBlur(): void {
+    // Delay hiding dropdown to allow for click events
+    setTimeout(() => {
+      this.showSenderDropdown = false;
+    }, 200);
+  }
+
+  // Receiver search and selection
+  onReceiverSearch(event: Event): void {
+    const searchTerm = (event.target as HTMLInputElement).value.toLowerCase();
+    this.receiverSearchTerm = searchTerm;
+    
+    if (searchTerm.trim() === '') {
+      this.filteredReceivers = [];
+      this.showReceiverDropdown = false;
+      return;
+    }
+    
+    this.filteredReceivers = this.customers.filter(customer => 
+      customer.name.toLowerCase().includes(searchTerm) ||
+      customer.email.toLowerCase().includes(searchTerm)
+    );
+    this.showReceiverDropdown = this.filteredReceivers.length > 0;
+  }
+
+  onReceiverSelect(receiver: User): void {
+    this.selectedReceiver = receiver;
+    this.parcel.receiverId = receiver.id;
+    this.receiverSearchTerm = receiver.name;
+    this.parcel.receiverName = receiver.name;
+    this.parcel.receiverPhone = receiver.phone || '';
+    this.showReceiverDropdown = false;
+    this.filteredReceivers = [];
+  }
+
+  onReceiverInputFocus(): void {
+    if (this.receiverSearchTerm.trim() !== '') {
+      this.showReceiverDropdown = this.filteredReceivers.length > 0;
+    }
+  }
+
+  onReceiverInputBlur(): void {
+    // Delay hiding dropdown to allow for click events
+    setTimeout(() => {
+      this.showReceiverDropdown = false;
+    }, 200);
+  }
+
+  // Courier search and selection
+  onCourierSearch(event: Event): void {
+    const searchTerm = (event.target as HTMLInputElement).value.toLowerCase();
+    this.courierSearchTerm = searchTerm;
+    
+    if (searchTerm.trim() === '') {
+      this.filteredCouriers = [];
+      this.showCourierDropdown = false;
+      return;
+    }
+    
+    this.filteredCouriers = this.couriers.filter(courier => 
+      courier.name.toLowerCase().includes(searchTerm) ||
+      courier.email.toLowerCase().includes(searchTerm)
+    );
+    this.showCourierDropdown = this.filteredCouriers.length > 0;
+  }
+
+  onCourierSelect(courier: Courier): void {
+    this.selectedCourier = courier;
+    this.parcel.assignedCourierId = courier.id;
+    this.courierSearchTerm = courier.name;
+    this.showCourierDropdown = false;
+    this.filteredCouriers = [];
+  }
+
+  onCourierInputFocus(): void {
+    if (this.courierSearchTerm.trim() !== '') {
+      this.showCourierDropdown = this.filteredCouriers.length > 0;
+    }
+  }
+
+  onCourierInputBlur(): void {
+    // Delay hiding dropdown to allow for click events
+    setTimeout(() => {
+      this.showCourierDropdown = false;
+    }, 200);
+  }
+
+  // Courier dropdown selection
   onCourierChange(event: Event): void {
     const courierId = (event.target as HTMLSelectElement).value;
     if (courierId) {
@@ -230,6 +364,8 @@ export class CreateParcelComponent implements OnInit, AfterViewInit {
       this.parcel.assignedCourierId = '';
     }
   }
+
+
 
   // Form validation
   isFormValid(): boolean {
@@ -247,11 +383,16 @@ export class CreateParcelComponent implements OnInit, AfterViewInit {
 
   // Form submission
   onSubmit(): void {
+    console.log('CreateParcelComponent - onSubmit called');
+    console.log('CreateParcelComponent - Form data:', this.parcel);
+    
     if (!this.isFormValid()) {
+      console.log('CreateParcelComponent - Form validation failed');
       this.error = 'Please fill in all required fields';
       return;
     }
 
+    console.log('CreateParcelComponent - Form validation passed');
     this.isSubmitting = true;
     this.error = '';
 
@@ -268,15 +409,17 @@ export class CreateParcelComponent implements OnInit, AfterViewInit {
       ...(this.parcel.assignedCourierId && { assignedCourierId: this.parcel.assignedCourierId })
     };
 
+    console.log('CreateParcelComponent - Sending parcel payload:', parcelPayload);
+
     this.parcelService.create(parcelPayload).subscribe({
       next: (response: Parcel) => {
-        console.log('Parcel created successfully:', response);
+        console.log('CreateParcelComponent - Parcel created successfully:', response);
         alert('Parcel created successfully!');
         this.resetForm();
         this.isSubmitting = false;
       },
       error: (err: any) => {
-        console.error('Error creating parcel:', err);
+        console.error('CreateParcelComponent - Error creating parcel:', err);
         this.error = err.error?.message || 'Failed to create parcel. Please try again.';
         this.isSubmitting = false;
       }
@@ -300,5 +443,16 @@ export class CreateParcelComponent implements OnInit, AfterViewInit {
     this.selectedReceiver = null;
     this.selectedCourier = null;
     this.error = '';
+    
+    // Reset search terms and dropdowns
+    this.senderSearchTerm = '';
+    this.receiverSearchTerm = '';
+    this.courierSearchTerm = '';
+    this.filteredSenders = [];
+    this.filteredReceivers = [];
+    this.filteredCouriers = [];
+    this.showSenderDropdown = false;
+    this.showReceiverDropdown = false;
+    this.showCourierDropdown = false;
   }
 }

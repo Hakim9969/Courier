@@ -75,6 +75,8 @@ export class ParcelService {
   }
 
   create(parcel: CreateParcelDto): Observable<Parcel> {
+    console.log('ParcelService - Creating parcel with payload:', parcel);
+    console.log('ParcelService - Using headers:', this.getHeaders());
     return this.http.post<Parcel>(this.baseUrl, parcel, {
       headers: this.getHeaders()
     });

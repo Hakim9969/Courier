@@ -44,6 +44,11 @@ export class AdminDashboardComponent implements OnInit {
   selectedPendingParcel: Parcel | null = null;
   searchText: string = '';
   searchStatus: string = '';
+  
+  // Delete confirmation modal
+  showDeleteModal = false;
+  parcelToDelete: Parcel | null = null;
+  isDeleting = false;
 
   activePage: string = 'dashboard';
 
@@ -150,6 +155,10 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   viewParcelDetails(parcel: Parcel) {
+    // Close delete modal if it's open
+    if (this.showDeleteModal) {
+      this.closeDeleteModal();
+    }
     this.selectedPendingParcel = parcel;
   }
 
@@ -198,10 +207,89 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   deleteParcel(parcelId: string) {
-    this.parcels = this.parcels.filter(p => p.id !== parcelId);
-    this.calculateStats();
-    if (this.selectedPendingParcel?.id === parcelId) {
+    // Close view modal if it's open
+    if (this.selectedPendingParcel) {
       this.selectedPendingParcel = null;
     }
+    
+    const parcel = this.parcels.find(p => p.id === parcelId);
+    if (parcel) {
+      this.parcelToDelete = parcel;
+      this.showDeleteModal = true;
+    }
+  }
+
+  confirmDelete() {
+    if (!this.parcelToDelete) return;
+    
+    this.isDeleting = true;
+    this.parcelService.delete(this.parcelToDelete.id).subscribe({
+      next: (response) => {
+        // Remove from local arrays
+        this.parcels = this.parcels.filter(p => p.id !== this.parcelToDelete!.id);
+        this.calculateStats();
+        
+        // Close modal if it's open
+        if (this.selectedPendingParcel?.id === this.parcelToDelete!.id) {
+          this.selectedPendingParcel = null;
+        }
+        
+        this.closeDeleteModal();
+        this.showSuccessMessage('Parcel deleted successfully!');
+      },
+      error: (err: any) => {
+        console.error('Delete failed', err);
+        this.closeDeleteModal();
+        this.showErrorMessage('Failed to delete parcel. Please try again.');
+      }
+    });
+  }
+
+  closeDeleteModal() {
+    this.showDeleteModal = false;
+    this.parcelToDelete = null;
+    this.isDeleting = false;
+  }
+
+  showSuccessMessage(message: string) {
+    // Create a temporary success message element
+    const successDiv = document.createElement('div');
+    successDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform transition-all duration-300 ease-in-out';
+    successDiv.textContent = message;
+    document.body.appendChild(successDiv);
+
+    // Animate in
+    setTimeout(() => {
+      successDiv.style.transform = 'translateX(0)';
+    }, 100);
+
+    // Remove after 3 seconds
+    setTimeout(() => {
+      successDiv.style.transform = 'translateX(100%)';
+      setTimeout(() => {
+        document.body.removeChild(successDiv);
+      }, 300);
+    }, 3000);
+  }
+
+  showErrorMessage(message: string) {
+    // Create a temporary error message element
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform transition-all duration-300 ease-in-out';
+    errorDiv.textContent = message;
+    document.body.appendChild(errorDiv);
+
+    // Animate in
+    setTimeout(() => {
+      errorDiv.style.transform = 'translateX(0)';
+    }, 100);
+
+    // Remove after 3 seconds
+    setTimeout(() => {
+      errorDiv.style.transform = 'translateX(100%)';
+      setTimeout(() => {
+        document.body.removeChild(errorDiv);
+      }, 300);
+    }, 3000);
   }
 }

@@ -46,6 +46,7 @@ export class ParcelController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   create(@Body() dto: CreateParcelDto): Promise<IParcel> {
+    console.log('ParcelController - Create endpoint called with DTO:', JSON.stringify(dto, null, 2));
     return this.parcelService.create(dto);
   }
 

@@ -1,0 +1,30 @@
+### Test Parcel Creation (requires admin token)
+POST http://localhost:3000/parcels
+Content-Type: application/json
+Authorization: Bearer YOUR_ADMIN_TOKEN_HERE
+
+{
+  "senderId": "sender-user-id",
+  "receiverId": "receiver-user-id", 
+  "receiverName": "John Doe",
+  "receiverPhone": "1234567890",
+  "pickupAddress": "123 Main St, City, State",
+  "destination": "456 Oak Ave, City, State",
+  "weightCategory": "MEDIUM"
+}
+
+### Test Parcel Creation with Courier Assignment
+POST http://localhost:3000/parcels
+Content-Type: application/json
+Authorization: Bearer YOUR_ADMIN_TOKEN_HERE
+
+{
+  "senderId": "sender-user-id",
+  "receiverId": "receiver-user-id",
+  "receiverName": "John Doe", 
+  "receiverPhone": "1234567890",
+  "pickupAddress": "123 Main St, City, State",
+  "destination": "456 Oak Ave, City, State",
+  "weightCategory": "MEDIUM",
+  "assignedCourierId": "courier-user-id"
+} 

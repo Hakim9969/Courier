@@ -1,0 +1,34 @@
+### Test Parcel Created Email
+POST http://localhost:3000/mailer/test-parcel-created
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "recipientName": "John Doe",
+  "parcelId": "test-parcel-123",
+  "senderName": "Jane Smith",
+  "receiverName": "John Doe",
+  "pickupAddress": "123 Main St, City, State",
+  "destination": "456 Oak Ave, City, State",
+  "weightCategory": "MEDIUM"
+}
+
+### Test Courier Assignment Email
+POST http://localhost:3000/mailer/test-courier-assignment
+Content-Type: application/json
+
+{
+  "email": "courier@example.com",
+  "courierName": "Mike Johnson",
+  "parcelId": "test-parcel-123",
+  "senderName": "Jane Smith",
+  "receiverName": "John Doe",
+  "pickupAddress": "123 Main St, City, State",
+  "destination": "456 Oak Ave, City, State"
+}
+
+### Test Email Connection
+POST http://localhost:3000/mailer/test
+Content-Type: application/json
+
+{} 
